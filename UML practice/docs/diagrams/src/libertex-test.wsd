@@ -1,0 +1,62 @@
+@startuml Libertex test
+
+actor user #7AFF33
+boundary Trading #Blue
+boundary Koinal #Green
+boundary "Account service" #Yellow
+
+activate user #Pink
+
+note left of user #aqua: 1. Need \ncrypto currency
+user --> Trading : Choose amount \nand currency
+activate Trading #Pink
+
+Trading -> Koinal : Get quote
+activate Koinal #Pink
+
+Trading <-- Koinal : Checking response
+deactivate Koinal
+
+alt successful case
+   user <-- Trading : OK 
+   user --> user : quote acceptance
+   activate user #LightSalmon
+
+   note left of user #aqua: 2. Accept quote \nput payment parameters
+   user --> Trading : Complete order
+
+   note left of Trading #aqua: 3. Submit payment
+   Trading -> Koinal : redirect
+   activate Koinal #Pink
+   Koinal --> Koinal : complete payment
+   Koinal --> Trading : Payment result
+   deactivate Koinal
+
+   Trading --> user : OK
+   deactivate Trading
+
+   user ->> "Account service" : Update account info
+   deactivate user
+   deactivate user   
+
+   activate "Account service" #Pink
+   "Account service" <<-- "Account service" : OK
+   "Account service" -->>o Trading : Account info updated
+   deactivate "Account service"
+
+else negative case
+   user <-- Trading : <<Thomething went wrong>>
+   note left of user #FFAAAA: Choose another \nparameters
+   deactivate Trading
+   deactivate user      
+   destroy user
+end
+
+
+
+deactivate user
+deactivate Trading
+deactivate Koinal
+
+
+@enduml

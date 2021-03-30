@@ -1,0 +1,21 @@
+@startuml First practice
+
+actor user
+participant backend
+database dataStore
+boundary portal
+control manager
+
+entity newEntity
+
+user -> backend ++: Send HTTP request to get info
+backend -> user --: Send HTTP respond
+
+backend -> dataStore: Get data
+
+dataStore --> newEntity ++: Get data
+newEntity --> dataStore: Respond data
+
+destroy newEntity
+
+@enduml
