@@ -1,0 +1,10 @@
+@startuml
+
+actor user1
+actor user2
+(Buying crypto currency) as (Use)
+
+user1 --> Use
+user2 --> Use
+
+@enduml
