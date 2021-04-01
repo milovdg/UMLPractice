@@ -1,0 +1,8 @@
+@startuml
+
+actor cryptoAddress
+actor merchantAddress
+
+merchantAddress -up-|> cryptoAddress
+
+@enduml
