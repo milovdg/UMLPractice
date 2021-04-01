@@ -1,4 +1,4 @@
-@startuml
+@startuml libertex-use
 
 actor cryptoAddress
 actor merchantAddress
