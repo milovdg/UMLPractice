@@ -12,8 +12,6 @@ usecase (Buy using merchant crypto address) as useMerchant
 merchantAddress -up-|> cryptoAddress
 clientAddress -up-|> cryptoAddress
 
-newpage
-
 merchantAddress -- useMerchant
 clientAddress -- useClient
 
