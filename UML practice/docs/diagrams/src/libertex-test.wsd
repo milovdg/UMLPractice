@@ -1,4 +1,5 @@
 @startuml Libertex test
+title <b>Koinal integration tutorial</b>
 
 actor user #7AFF33
 boundary Trading #Blue
