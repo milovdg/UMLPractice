@@ -1,0 +1,9 @@
+@startuml
+title <b>Components</b>
+
+[Brokers] -up-> [Libertex]
+[Terminals] -up-> [Libertex]
+
+
+
+@enduml
