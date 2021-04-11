@@ -1,0 +1,12 @@
+@startuml
+title <b>Payment integration</b>\n 
+
+[Constructor] -up-> [PS integrations]
+[Hand made] -up-> [PS integrations]
+[Easy Payment Gateway (EPG)] -up-> [Constructor]
+[UPP service] -up-> [Easy Payment Gateway (EPG)]
+[Payment Gateways Adapter] -up-> [Constructor] : ???
+[Payment Hub Core] -up-> [Constructor] : ???
+[Payment Hub Adapters] -up-> [Constructor] : ???
+
+@enduml
