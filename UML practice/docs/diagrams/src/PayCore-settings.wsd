@@ -1,0 +1,39 @@
+@startuml libertex-use
+
+title <b>Setting up PayCore connections</b>
+
+usecase Organization
+usecase (Commerce settings)
+usecase Connectors
+usecase (Payment gateway)
+usecase (Card Gate)
+
+usecase (Commerce accounts)
+usecase (Currency accounts)
+usecase (Commerce schemes)
+
+usecase (Provider accounts)
+usecase (Merchant accounts)
+
+usecase (Payment routs)
+usecase (Payment schemes)
+
+(Commerce settings) -up-|> Organization
+
+Connectors -up-|> (Commerce settings)
+(Commerce accounts) -right-> (Commerce settings)
+(Currency accounts) -right-> (Commerce settings)
+(Commerce schemes) -right-> (Commerce settings)
+
+(Payment gateway) -up-|> Connectors
+(Provider accounts) -right-> Connectors
+(Merchant accounts) -right-> Connectors
+
+(Card Gate) -up-|> (Payment gateway)
+(Payment routs) -right-> (Payment gateway)
+(Payment schemes) -right-> (Payment gateway)
+
+(Merchant accounts) -right-> (Card Gate)
+(Payment schemes) -right-> (Card Gate)
+
+@enduml
