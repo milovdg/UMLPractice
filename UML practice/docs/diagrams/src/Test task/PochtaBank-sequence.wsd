@@ -1,0 +1,47 @@
+@startuml First practice
+
+actor user
+control Front_end
+
+box "Back end" #LightBlue
+    participant DBO
+end box
+
+entity Service_bus
+database CRM
+participant ABS
+boundary Processing
+
+
+user ->> Front_end ++: 1. Заполнение и подтверждение заявки
+
+activate DBO #FFBBBB
+Front_end -> DBO : 2. Отправка синхронного запроса на формирование заказа карты
+DBO ->> Service_bus ++: 3. Отправка асинхронного запроса на получение клиентских данных
+Service_bus ->> CRM ++: 3.1 Маршрутизация запроса
+CRM -->> Service_bus --: 3.2 Клиентские данные
+Service_bus -->> DBO --: 3.3 Клиентские данные
+DBO ->> Service_bus ++: 4. Отправка асинхронного запроса на получение данных по договорам
+Service_bus ->> ABS ++: 4.1 Маршрутизация запроса
+ABS -->> Service_bus --: 4.2 Данные по договорам
+Service_bus -->> DBO --: 4.3 Данные по договорам
+
+activate DBO #DarkSalmon
+
+DBO -> DBO: Клиентские данные и данные по договорам валидны?
+
+alt Да
+
+    DBO -> Processing : 5. Запрос на выпуск карты
+    Processing --> DBO : 5.1 Мастер-данные по карте
+    DBO --> Front_end : 5.2 Успех, Мастер-данные по карте
+else Нет
+
+    DBO --> Front_end : 5.3 Ошибка заказа карты
+
+end
+
+deactivate DBO
+deactivate DBO
+
+@enduml
