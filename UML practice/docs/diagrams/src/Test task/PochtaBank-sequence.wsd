@@ -13,7 +13,7 @@ participant ABS
 boundary Processing
 
 
-user ->> Front_end ++: 1. Заполнение и подтверждение заявки
+user ->> Front_end ++: 1. Заполнение и подтверждение заявки на заказ
 
 activate DBO #FFBBBB
 Front_end -> DBO : 2. Отправка синхронного запроса на формирование заказа карты
