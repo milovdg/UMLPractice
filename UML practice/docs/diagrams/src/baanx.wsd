@@ -1,0 +1,27 @@
+@startuml libertex-use
+
+title <b>Baanx high level flow</b>
+
+state Defining_fake_iFrame_environment_for_testing {
+
+[*] -right-> user
+user: create an iframe user
+
+user -right-> session
+session: create a session for the new user
+
+session -right-> url
+url: enter the entry point iframe url
+
+url -up-> KYC
+}
+
+KYC -down-> card_ordering
+card_ordering -right-> ...
+... -right-> other_request_inside_iFrame
+other_request_inside_iFrame -right-> [*]
+
+
+
+
+@enduml
