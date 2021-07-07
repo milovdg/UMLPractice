@@ -1,22 +1,33 @@
 @startuml libertex-use
 
-title <b>Baanx high level flow</b>
+title <b>Card order iFrame baanx high level flow</b>
+
+[*] -right-> KYC
+KYC: Should be on Libertex side
 
 state Defining_fake_iFrame_environment_for_testing {
 
-[*] -right-> user
+KYC -right-> user
 user: create an iframe user
+note on link : APIToken
 
 user -right-> session
 session: create a session for the new user
+note on link : APIToken
 
 session -right-> url
 url: enter the entry point iframe url
+note on link : user APIToken, user id
 
-url -up-> KYC
+url -up-> Submit_KYC_Documents
 }
 
-KYC -down-> card_ordering
+KYC -right[dashed]-> Submit_KYC_Documents
+Submit_KYC_Documents : should be unvisible for users
+
+Submit_KYC_Documents -down-> card_ordering
+note on link : cookie
+
 card_ordering -right-> ...
 ... -right-> other_request_inside_iFrame
 other_request_inside_iFrame -right-> [*]
