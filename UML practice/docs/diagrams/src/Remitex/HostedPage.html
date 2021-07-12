@@ -1,0 +1,214 @@
+<html itemscope itemtype="http://schema.org/Product">
+
+<head np-srv="10">
+	<title>
+		RemitEx -
+	</title>
+
+
+
+
+	<!-- FONT & ICONS -->
+
+	<!-- BEGIN FAVICO -->
+	<link rel="icon" type="image/x-icon" href="../Templates/Tmp_RemitEx/favicon.ico" />
+	<!-- END FAVICO -->
+
+
+	<script type="text/jscript">
+		$(document).ready(function () { netpay.Blocker.init(true, { opacity: 30 }); });
+	</script>
+	<style>
+		.footer {
+			/*position: absolute;
+                bottom: 0;
+                width: 100%;
+                height: 100px;
+                background-color: #f5f5f5;*/
+			padding-top: 60px;
+			text-align: center;
+		}
+	</style>
+
+	<link rel="stylesheet" type="text/css"
+		href="/(S(appll0af30cz5p5dkcxotuf4))/Templates/Tmp_RemitEx/Styles/style.css" />
+	<link rel="stylesheet" type="text/css"
+		href="/(S(appll0af30cz5p5dkcxotuf4))/Templates/Tmp_RemitEx/Styles/styleltr.css" />
+	<link rel="icon" type="image/x-icon"
+		href="/(S(appll0af30cz5p5dkcxotuf4))/Templates/Tmp_RemitEx/Design/New/favicon.ico" />
+	<meta http-equiv="Cache-control" content="No-Cache">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Expires" content="-1">
+</head>
+
+<body onload="focus();">
+
+	<!--Header-->
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header" style="width: 100%;">
+				<a class="navbar-brand navbar-left" href="#" style="margin-top: 5px;">
+
+				</a>
+				<div class="navbar-right" style="margin-top: 12px;">
+					<img id="ctl00_wcLanguageSelectorAnchorImage" style="cursor:help;" src="/NPCommon/ImgCountry/18X12/GB.gif" onmouseover="javascript:netpay.webControls.PopupButton.open('ctl00_wcLanguageSelector', 'ltr', 0, false, 'onmouseover')" />&nbsp;<span id="ctl00_wcLanguageSelectorAnchorText" style="cursor:help;" onmouseover="javascript:netpay.webControls.PopupButton.open('ctl00_wcLanguageSelector', 'ltr', 0, false, 'onmouseover')">&nbsp;<span class="langSelector" style="text-transform:capitalize;">English</span>&nbsp;<img src="/NPCommon/images/ArrowDown.gif" /></span>
+					<div id="ctl00_wcLanguageSelectorBackground"
+						style="cursor:help; display:inline-block; position:absolute; padding:3px 20px; "></div>
+					<div id="ctl00_wcLanguageSelectorContent"
+						style="cursor:help;position: absolute;color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);border: 0px solid rgb(0, 0, 0);z-index: 1;padding: 3px 20px;display: none;top: 30px;margin-left:-45px;font-size: 1.4em;box-shadow:#969696 0 0 5px;">
+						<table>
+							<tr>
+								<td>
+									<div onclick="javascript:__doPostBack('ctl00$wcLanguageSelector','fr-FR')"
+										class="langSelector" onmouseover="this.style.backgroundColor='#d8d8d8';"
+										onmouseout="this.style.backgroundColor='#ffffff';"
+										style="text-align:left; direction:ltr; cursor:pointer; border:0px solid #000000; width:100%; height:17px; padding-top:3px; text-transform:capitalize; background-color:#ffffff;">
+										<img border="0" title="français" src="/NPCommon/ImgCountry/18X12/FR.gif">&nbsp;français</div>
+										<div onclick="javascript:__doPostBack('ctl00$wcLanguageSelector','es-ES')"
+											class="langSelector" onmouseover="this.style.backgroundColor='#d8d8d8';"
+											onmouseout="this.style.backgroundColor='#ffffff';"
+											style="text-align:left; direction:ltr; cursor:pointer; border:0px solid #000000; width:100%; height:17px; padding-top:3px; text-transform:capitalize; background-color:#ffffff;">
+											<img border="0" title="español" src="/NPCommon/ImgCountry/18X12/ES.gif">&nbsp;español</div>
+											<div onclick="javascript:__doPostBack('ctl00$wcLanguageSelector','it-IT')"
+												class="langSelector" onmouseover="this.style.backgroundColor='#d8d8d8';"
+												onmouseout="this.style.backgroundColor='#ffffff';"
+												style="text-align:left; direction:ltr; cursor:pointer; border:0px solid #000000; width:100%; height:17px; padding-top:3px; text-transform:capitalize; background-color:#ffffff;">
+												<img border="0" title="italiano" src="/NPCommon/ImgCountry/18X12/IT.gif">&nbsp;italiano</div>
+												<div onclick="javascript:__doPostBack('ctl00$wcLanguageSelector','lt-LT')"
+													class="langSelector"
+													onmouseover="this.style.backgroundColor='#d8d8d8';"
+													onmouseout="this.style.backgroundColor='#ffffff';"
+													style="text-align:left; direction:ltr; cursor:pointer; border:0px solid #000000; width:100%; height:17px; padding-top:3px; text-transform:capitalize; background-color:#ffffff;">
+													<img border="0" title="lietuvių" src="/NPCommon/ImgCountry/18X12/LT.gif">&nbsp;lietuvių</div>
+													<div onclick="javascript:__doPostBack('ctl00$wcLanguageSelector','ru-RU')"
+														class="langSelector"
+														onmouseover="this.style.backgroundColor='#d8d8d8';"
+														onmouseout="this.style.backgroundColor='#ffffff';"
+														style="text-align:left; direction:ltr; cursor:pointer; border:0px solid #000000; width:100%; height:17px; padding-top:3px; text-transform:capitalize; background-color:#ffffff;">
+														<img border="0" title="русский" src="/NPCommon/ImgCountry/18X12/RU.gif">&nbsp;русский</div>
+														<div onclick="javascript:__doPostBack('ctl00$wcLanguageSelector','de-DE')"
+															class="langSelector"
+															onmouseover="this.style.backgroundColor='#d8d8d8';"
+															onmouseout="this.style.backgroundColor='#ffffff';"
+															style="text-align:left; direction:ltr; cursor:pointer; border:0px solid #000000; width:100%; height:17px; padding-top:3px; text-transform:capitalize; background-color:#ffffff;">
+															<img border="0" title="Deutsch" src="/NPCommon/ImgCountry/18X12/DE.gif">&nbsp;Deutsch</div>
+															<div onclick="javascript:__doPostBack('ctl00$wcLanguageSelector','zh')"
+																class="langSelector"
+																onmouseover="this.style.backgroundColor='#d8d8d8';"
+																onmouseout="this.style.backgroundColor='#ffffff';"
+																style="text-align:left; direction:ltr; cursor:pointer; border:0px solid #000000; width:100%; height:17px; padding-top:3px; text-transform:capitalize; background-color:#ffffff;">
+																<img border="0" title="中文" src="/NPCommon/ImgCountry/18X12/zh.gif">&nbsp;中文</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<div class="container-fluid" style="padding-left: 0px;
+padding-right: 0px;">
+		<div class="row">
+			<div class="col-md-12">
+				<form name="aspnetForm" method="post"
+					action="./Error.aspx?token=15454-DvHJg6Sy8Xf0iPmGaauQG%2faX6f9KGQ5UzVcP8ug0L8Y%3d&amp;message=Cannot+proceed%2c+missing+or+invalid+signature.+%0d%0a%09+Please+consult+the+support+at+the+referring+site."
+					id="aspnetForm" style="margin: 0px; padding: 0px;">
+					<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTYwNTk2MDU3Ng8WAh4TVmFsaWRhdGVSZXF1ZXN0TW9kZQIBFgJmD2QWCmYPFgIeBm5wLXNydgUCMTBkAgEPDxYEHghJbWFnZVVybAUqL05QQ29tbW9uL2ltYWdlcy9Mb2dvU2VjdXJlX05ldHBheUludGwuanBnHgdWaXNpYmxlaGRkAgMPZBYCAgEPZBYCAgEPFgIeBFRleHQFY0Nhbm5vdCBwcm9jZWVkLCBtaXNzaW5nIG9yIGludmFsaWQgc2lnbmF0dXJlLiANCgkgUGxlYXNlIGNvbnN1bHQgdGhlIHN1cHBvcnQgYXQgdGhlIHJlZmVycmluZyBzaXRlLmQCBA8WAh4Dc3JjBSYvTlBDb21tb24vSW1hZ2VzL0ljb25DYXJkTGlzdE5vSGViLmpwZ2QCBQ8WAh8EBStSZW1pdEV4IC0gQ29tcGxldGUgT25saW5lIFBheW1lbnQgU29sdXRpb25zZGQygLDbEJEEaSTkClmOlpwd6Xn3cw==" />
+
+
+					<script
+						src="/WebResource.axd?d=8UaM7dKqga9KZ7cxagQwlub_SMzugMymaGfdPWsS1aeH5Jtqhq5ZL7i6hkUauFtYigRTNvSn9AWiKVGkscvTKPkUUJBhKBr-L7mB0TzeSs6RG5_mYEZLuOFNYEzWe4v7P55ce9g466GdTqkc6DNIKLsDHBo1&amp;t=637599752036928791"
+						type="text/javascript"></script>
+					<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="AB827D4F" />
+
+
+					<br /><br />
+					<div
+						style="font-size: 15px;text-align: center; font-weight: bold;min-height: 300px;margin-top: 50px;border: 1px solid #ccc;padding: 30px;width: 60%;margin-right: auto;margin-left: auto;background-color: #fff;">
+						Cannot proceed, missing or invalid signature.
+						Please consult the support at the referring site.
+					</div>
+
+				</form>
+
+
+			</div>
+		</div>
+	</div>
+	<footer class="footer row">
+		<div class="container">
+			<div class="col-md-12">
+
+				<img src="/NPCommon/Images/IconCardListNoHeb.jpg" id="ctl00_imgCardList" alt="Secured web site by Godaddy" /><br />
+                                            RemitEx - Complete Online Payment Solutions<br />
+
+				<img src="/NPCommon/Images/GodaddySeal1024.gif" alt="Secured web site by Godaddy" /><br />
+
+				<p><br/>Powered By</p>
+					<img src="/Data/Logos/logo.png" alt="" /><br />
+
+                            </div>
+			</div>
+	</footer>
+	<script type="text/javascript">
+		var clientContext = new Object();
+clientContext.currentDirection = "ltr";
+clientContext.currentAlignment = "left";
+clientContext.currentReverseAlignment = "right";
+clientContext.currentLanguageShort = "en";
+clientContext.themeFolder = "Tmp_RemitEx";
+clientContext.currentDateFormat = "dd/mm/yy";
+	</script>
+	<script type="text/javascript"
+		src="/WebResource.axd?d=8QZ7780uRTwFgAAJyA95m6LlL_9EzbOZKCOEjB9nmY8PZUsCkfRosjB0c6nJGVKaia36KhSq3pELWlPZ_0w8d3zhRi_9eEyqD8PkxP3K6AQqGf3GMB_BJG0hMI69qE0n1CcWsmg9vSrNzCkPGtNHehIRt181&t=637599752036928791">
+	</script>
+	<script type="text/javascript"
+		src="/WebResource.axd?d=k2NWFpTpkuZNFZuPb690F5zLRLMEEpY-ectC00eij9AzUcwUO8v5BWWe7UHkhJHLktfjXchV5vBCo0ewMrmBhhpmPqsS1Fd_uAsY75aBJuwuxzOHPJiBTwP5iV19tQgBHHGVualiAG4BLTqUx58F973mwLM1&t=637599752036928791">
+	</script>
+	<script type="text/javascript"
+		src="/WebResource.axd?d=tuoqa7sT7Q3nbJ0y2cSiDH1XZPUnJ58Xr5rYRRXn8jdi5G1znpy3YmaAeXd4GBNm1bz90jlPlV0ho37mk3h-ojSNLH9h0OwO9Lwc0ispVjzAhHN_ef6S5SNVqSghUIS67ThLIHzfENuxRwCTyzKuk77xte41&t=637599752036928791">
+	</script>
+	<script type="text/javascript"
+		src="/WebResource.axd?d=Z072FODMI1L6irYlBLwBHjVKgKtEga0rSGc0m_HAK1CPFOfb1gDqwzuirXOQIjPNcPxDys4XdpphVR3SvP3-3gJ41pQD-XKGzJoV6uSi78ja0WS6TKyTH0Z97WZlu_Fy3c7oRJRhbBc5XFFeW7Al6x1wSC-J3H67UjUb7bY46mh_ZjBO0&t=637599752036928791">
+	</script>
+	<script type="text/javascript">
+		if (netpay == null) { var netpay = {} };
+if (netpay.ajaxApi == null) { netpay.ajaxApi = {} };
+netpay.ajaxApi.AjaxMethods = 
+{
+
+KeepSession:function (successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'KeepSession', {}, successHandler, errorHandler, context);},
+GetMerchantNameAutoComplete:function (merchantNamePrefix, additionalParams, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'GetMerchantNameAutoComplete', {'merchantNamePrefix':merchantNamePrefix, 'additionalParams':additionalParams}, successHandler, errorHandler, context);},
+GetDebitTerminalTagAutoComplete:function (terminalTagPrefix, additionalParams, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'GetDebitTerminalTagAutoComplete', {'terminalTagPrefix':terminalTagPrefix, 'additionalParams':additionalParams}, successHandler, errorHandler, context);},
+GetDebitTerminalAutoComplete:function (terminalNamePrefix, additionalParams, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'GetDebitTerminalAutoComplete', {'terminalNamePrefix':terminalNamePrefix, 'additionalParams':additionalParams}, successHandler, errorHandler, context);},
+GetAccountNumberAutoComplete:function (accountNamePrefix, additionalParams, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'GetAccountNumberAutoComplete', {'accountNamePrefix':accountNamePrefix, 'additionalParams':additionalParams}, successHandler, errorHandler, context);},
+GetDenormalizedTransaction:function (transactionID, transactionStatus, isChargeback, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'GetDenormalizedTransaction', {'transactionID':transactionID, 'transactionStatus':transactionStatus, 'isChargeback':isChargeback}, successHandler, errorHandler, context);},
+GetTransactionPrintSlip:function (transactionID, transactionStatus, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'GetTransactionPrintSlip', {'transactionID':transactionID, 'transactionStatus':transactionStatus}, successHandler, errorHandler, context);},
+GetTransactionCreateInvoice:function (transactionID, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'GetTransactionCreateInvoice', {'transactionID':transactionID}, successHandler, errorHandler, context);},
+GetSiteFeedback:function (subject, body, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'GetSiteFeedback', {'subject':subject, 'body':body}, successHandler, errorHandler, context);},
+GetCapture:function (transactionID, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'GetCapture', {'transactionID':transactionID}, successHandler, errorHandler, context);},
+DoCapture:function (transactionID, amount, comment, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'DoCapture', {'transactionID':transactionID, 'amount':amount, 'comment':comment}, successHandler, errorHandler, context);},
+ProcessRefundRequest:function (transactionID, transactionStatus, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'ProcessRefundRequest', {'transactionID':transactionID, 'transactionStatus':transactionStatus}, successHandler, errorHandler, context);},
+ProcessRefund:function (companynum, HashKey, transactionID, transactionStatus, amount, comment, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'ProcessRefund', {'companynum':companynum, 'HashKey':HashKey, 'transactionID':transactionID, 'transactionStatus':transactionStatus, 'amount':amount, 'comment':comment}, successHandler, errorHandler, context);},
+GetRefundRequest:function (transactionID, transactionStatus, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'GetRefundRequest', {'transactionID':transactionID, 'transactionStatus':transactionStatus}, successHandler, errorHandler, context);},
+RequestRefund:function (transactionID, transactionStatus, amount, comment, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'RequestRefund', {'transactionID':transactionID, 'transactionStatus':transactionStatus, 'amount':amount, 'comment':comment}, successHandler, errorHandler, context);},
+GetSeriesFromTransaction:function (transactionID, transactionStatus, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'GetSeriesFromTransaction', {'transactionID':transactionID, 'transactionStatus':transactionStatus}, successHandler, errorHandler, context);},
+CreateSeriesFromTransaction:function (transactionID, transactionStatus, charges, intervalCount, intervalUnit, amount, comment, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'CreateSeriesFromTransaction', {'transactionID':transactionID, 'transactionStatus':transactionStatus, 'charges':charges, 'intervalCount':intervalCount, 'intervalUnit':intervalUnit, 'amount':amount, 'comment':comment}, successHandler, errorHandler, context);},
+GetFilesAndNotesForTransaction:function (transactionID, transactionStatus, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'GetFilesAndNotesForTransaction', {'transactionID':transactionID, 'transactionStatus':transactionStatus}, successHandler, errorHandler, context);},
+FilesWindowForTransaction:function (transactionID, transactionStatus, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'FilesWindowForTransaction', {'transactionID':transactionID, 'transactionStatus':transactionStatus}, successHandler, errorHandler, context);},
+NoteWindowForTransaction:function (transactionID, transactionStatus, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'NoteWindowForTransaction', {'transactionID':transactionID, 'transactionStatus':transactionStatus}, successHandler, errorHandler, context);},
+ApplyNoteForTransaction:function (transactionID, transactionStatus, newNoteText, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'ApplyNoteForTransaction', {'transactionID':transactionID, 'transactionStatus':transactionStatus, 'newNoteText':newNoteText}, successHandler, errorHandler, context);},
+AddToBlacklist:function (transactionID, transactionStatus, successHandler, errorHandler, context){netpay.Ajax.call('AjaxMethods', 'AddToBlacklist', {'transactionID':transactionID, 'transactionStatus':transactionStatus}, successHandler, errorHandler, context);}}
+	</script>
+
+	<script type="text/javascript" src="Scripts/jquery-ui-1.8.10.custom/js/jquery-1.4.4.min.js" defer="defer"></script>
+	<script type="text/javascript" src="Scripts/jquery-ui-1.8.10.custom/js/jquery-ui-1.8.10.custom.min.js"
+		defer="defer"></script>
+	<script type="text/javascript" src="Scripts/jquery-ui-1.8.10.custom/js/jquery.ui.datepicker-he.js" defer="defer">
+	</script>
+
+	<script async type="text/javascript"
+		src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=5&cb=2137661463"></script>
+</body>
+
+</html>
