@@ -1,0 +1,26 @@
+@startuml First practice
+
+actor user
+participant "Server side SG/Libertex"
+participant Remitex #pink
+entity "Client's bank" #pink
+actor sysadmin
+
+
+note right of "Server side SG/Libertex" #Aqua: I1: GET HOSTED PAYMENT PAGE
+"Server side SG/Libertex" -> Remitex ++: Request for hosted payment page
+
+Remitex --> user --: hosted payment page to fill out
+
+user -> Remitex ++: Payment confirmation 
+Remitex --> user --: OK: Payment requesites for SWIFT wire transfer
+
+activate user #LightSalmon
+note left of user #FFAAAA: May take a while
+user -> "Client's bank" ++: Make a SWIFT wire transfer
+"Client's bank" --> user --: Bank Wire Confirmation
+user -> Remitex ++: Upload KYC docs
+Remitex --> user --: OK
+deactivate user
+
+@enduml
