@@ -1,4 +1,4 @@
-@startuml First practice
+@startuml Remitex
 
 actor user
 participant "Server side SG/Libertex"
@@ -13,7 +13,7 @@ note right of "Server side SG/Libertex" #Aqua: I1: GET HOSTED PAYMENT PAGE
 
 Remitex --> user --: hosted payment page to fill out
 
-user -> Remitex ++: Payment confirmation 
+user -> Remitex ++: Order confirmation 
 Remitex --> user --: OK: Payment requesites for SWIFT wire transfer
 
 activate user #LightSalmon
