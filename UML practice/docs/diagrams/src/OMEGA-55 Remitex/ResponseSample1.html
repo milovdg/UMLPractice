@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head np-srv="10">
+	<meta name="robots" content="noindex, nofollow" />
+
+	<title>Holcomb Finance Limited - Payment Page</title>
+
+	<meta name="description" content="Payment page" />
+	<meta name="keywords" content="Hosted page, Transaction, Payment Page" />
+	<meta name="copyright" content="Copyright 2020. All Rights Reserved." />
+	<meta name="language" content="en" />
+	<meta name="robots" content="index,follow" />
+	<meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0" />
+
+	<!--[if lt IE 9]>
+    <script>
+    document.createElement('header');
+    document.createElement('nav');
+    document.createElement('section');
+    document.createElement('article');
+    document.createElement('aside');
+    document.createElement('footer');
+    document.createElement('hgroup');
+    </script>
+    <![endif]-->
+
+
+
+
+
+	<link rel="stylesheet" href="../styles/intlTelInput.min.css" />
+	<script src="../../scripts/minified_a.js"></script>
+	<link type="text/css" rel="stylesheet" href="../styles/bootstrap.min.css" />
+
+
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("#ctl00_ctl00_wc2LanguageSelector_Popup").css("display", "none");
+
+			$("#ctl00_ctl00_body_body_payControl_txtSecurityNumber").keydown(function (e) {
+				if (e.shiftKey || e.ctrlKey || e.altKey) {
+					e.preventDefault();
+				} else {
+					var key = e.keyCode;
+					if (!((key == 8) || (key == 9) || (key == 46) || (key >= 35 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105))) {
+						$("#ctl00_ctl00_body_body_payControl_txtSecurityNumber").addClass('shake');
+						e.preventDefault();
+						setTimeout(function () {
+							$("#ctl00_ctl00_body_body_payControl_txtSecurityNumber").removeClass('shake');
+						}, 700);
+					}
+				}
+			});
+
+			$("#ctl00_ctl00_body_body_payControl_txtSecurityNumber").on("change", function () {
+				var val = parseInt(this.value);
+				if (val > 9999 || val < 1) {
+					alert('Invalid CVV');
+					this.value = '';
+				}
+			})
+
+			$("#F_1").on("input", function (e) {
+				e.target.value = e.target.value.replace(/[^0-9]/g, '')
+			});
+
+			$("#ctl00_ctl00_body_body_payControl_txtCardholderName").keydown(function (e) {
+				if (e.ctrlKey || e.altKey) {
+					e.preventDefault();
+				} else {
+					var key = e.keyCode;
+					if (!((key == 8) || (key == 9) || (key == 32) || (key == 46)  || (key == 186) || (key == 188)  || (key == 190) || (key >= 65 && key <= 90))) {
+						$("#ctl00_ctl00_body_body_payControl_txtCardholderName").addClass('shake');
+						e.preventDefault();
+						setTimeout(function () {
+							$("#ctl00_ctl00_body_body_payControl_txtCardholderName").removeClass('shake');
+						}, 700);
+					}
+				}
+			});
+			$("#ctl00_ctl00_body_body_payControl_txtFullName").keydown(function (e) {
+				if (e.ctrlKey || e.altKey) {
+					e.preventDefault();
+				} else {
+					var key = e.keyCode;
+					if (!((key == 8) || (key == 9) || (key == 32) || (key == 46)  || (key == 186) || (key == 188)  || (key == 190) || (key >= 65 && key <= 90))) {
+						$("#ctl00_ctl00_body_body_payControl_txtFullName").addClass('shake');
+						e.preventDefault();
+						setTimeout(function () {
+							$("#ctl00_ctl00_body_body_payControl_txtFullName").removeClass('shake');
+						}, 700);
+					}
+				}
+			});
+			$(".cityValidator").keydown(function (e) {
+				if (e.ctrlKey || e.altKey) {
+					e.preventDefault();
+				} else {
+					var key = e.keyCode;
+					if (!((key == 8) || (key == 9) || (key == 32) || (key == 46)  || (key == 186) || (key == 188)  || (key == 190) || (key >= 65 && key <= 90))) {
+						$(".cityValidator").addClass('shake');
+						e.preventDefault();
+						setTimeout(function () {
+							$(".cityValidator").removeClass('shake');
+						}, 700);
+					}
+				}
+			});
+			$("#ctl00_ctl00_body_body_payControl_personalDetails_txtCardholderID").keydown(function (e) {
+				if (e.shiftKey || e.ctrlKey || e.altKey) {
+					e.preventDefault();
+				} else {
+					var key = e.keyCode;
+					if (!((key == 8) || (key == 9) || (key == 46) || (key >= 35 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105))) {
+						$("#ctl00_ctl00_body_body_payControl_personalDetails_txtCardholderID").addClass('shake');
+						e.preventDefault();
+						setTimeout(function () {
+							$("#ctl00_ctl00_body_body_payControl_personalDetails_txtCardholderID").removeClass('shake');
+						}, 700);
+					}
+				}
+			});
+			$(".txtPhone").keydown(function (e) {
+				if (e.shiftKey || e.ctrlKey || e.altKey) {
+					e.preventDefault();
+				} else {
+					var key = e.keyCode;
+					if (!((key == 8) || (key == 9) || (key == 46) || (key == 189) || (key >= 35 && key <= 40) || (key >= 48 && key <= 57) || (key >= 96 && key <= 105))) {
+						$(".txtPhone").addClass('shake');
+						e.preventDefault();
+						setTimeout(function () {
+							$(".txtPhone").removeClass('shake');
+						}, 700);
+					}
+				}
+			});
+			//removes the req class from hidden files 
+			$(".wrap-button").hover(function () {
+				$("input:hidden").removeClass('req');
+
+			});
+		});
+
+		function limitCvv(element) {
+			var max_chars = 4;
+
+			if (element.value.length > max_chars) {
+				element.value = element.value.substr(0, max_chars);
+			}
+		}
+		function limitphone(element) {
+			var max_chars = 30;
+
+			if (element.value.length > max_chars) {
+				element.value = element.value.substr(0, max_chars);
+			}
+		}
+		function focusToValidate() {
+			
+			// Bluring the fields
+			$("input").each(function () {
+				$(this).trigger("blur")
+			})
+			
+
+			// Errors founded
+			if ($('input').hasClass('error')) {
+				$('input[type=button]').addClass('inputDisabled');
+				$('div.inputErrorMsg').html('<p style="text-align: center;border: 1px solid #aaa;background: #fff8f8;padding: 10px;">Please review the submitted info and update accordingly.</p>');
+				$('div.buttonErrorDiv').show();
+
+				// No errors founded or form fixed
+			} else {
+				$('input[type=button]').removeClass('inputDisabled');
+				$('div.inputErrorMsg').empty();
+				$('div.buttonErrorDiv').hide();
+			}
+		}
+
+				 	function fieldValidator() {
+ 		$('div.buttonErrorDiv').hide();
+ 		
+			// Errors founded
+ 		if ($('input').hasClass('error')) {
+ 			//console.log("error found");
+				$('input[type=button]').addClass('inputDisabled');
+				$('div.inputErrorMsg').html('<p style="text-align: center;border: 1px solid #aaa;background: #fff8f8;padding: 10px;">Please review the submitted info and update accordingly.</p>');
+				$('div.buttonErrorDiv').show();
+
+				// No errors founded or form fixed
+			} else {
+				$('input[type=button]').removeClass('inputDisabled');
+				$('div.inputErrorMsg').empty();
+				$('div.buttonErrorDiv').hide();
+			}
+		}
+	</script>
+
+
+
+
+	<link rel="stylesheet" type="text/css"
+		href="/(S(kmb1i5rruz1lezvlssls2pvw))/Templates/Tmp_RemitEx/Design/EmbedShort/Styles/style.min.css" />
+	<link rel="stylesheet" type="text/css"
+		href="/(S(kmb1i5rruz1lezvlssls2pvw))/Templates/Tmp_RemitEx/Design/EmbedShort/Styles/styleltr.min.css" />
+	<link rel="stylesheet" type="text/css" href="/Data/Accounts/4444582/UIServices/css/hpp.css" />
+	<link rel="icon" type="image/x-icon"
+		href="/(S(kmb1i5rruz1lezvlssls2pvw))/Templates/Tmp_RemitEx/Design/New/favicon.ico" />
+	<meta http-equiv="Cache-control" content="No-Cache">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Expires" content="-1">
+	<title>
+		RemitEx - Pay Using Wire transfer
+	</title>
+</head>
+
+<body onload="focus();" class="custom-background-EmbedShort">
+
+	<form name="aspnetForm" method="post"
+		action="./default.aspx?token=16018-kXsTGRQhbanehb1tH%2bnhtUuAnd3lerWkz2Xrwzo2YGA%3d" id="aspnetForm"
+		class="validate">
+		<input type="hidden" name="PaymentMethodType" id="PaymentMethodType" value="2" />
+		<input type="hidden" name="PaymentMethod" id="PaymentMethod" value="111" />
+		<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUJNjQ3NjE2NjY2D2QWAmYPZBYCZg9kFgQCAQ8WAh4GbnAtc3J2BQIxMGQCAw9kFgQCAQ9kFg4CAQ8WAh4HVmlzaWJsZWgWAmYPDxYEHghJbWFnZVVybAUqL05QQ29tbW9uL2ltYWdlcy9Mb2dvU2VjdXJlX05ldHBheUludGwuanBnHwFoZGQCBQ8WAh8BaGQCBw8WAh4EVGV4dGVkAg0PFgIfAwUL4oKsNyw3NzcuMDBkAg8PZBYGAgEPFgIfA2VkAgMPZBYCZg9kFg4CAg8WAh8BaGQCAw8WAh8BaGQCBA8VAgExATFkAiEPEGQQFfsBAAALQWZnaGFuaXN0YW4NQWxhbmQgSXNsYW5kcwdBbGJhbmlhB0FsZ2VyaWEOQW1lcmljYW4gU2Ftb2EHQW5kb3JyYQZBbmdvbGEIQW5ndWlsbGEKQW50YXJjdGljYQdBbnRpZ3VhCUFyZ2VudGluYQdBcm1lbmlhBUFydWJhCUF1c3RyYWxpYQdBdXN0cmlhCkF6ZXJiYWlqYW4HQmFoYW1hcwdCYWhyYWluCkJhbmdsYWRlc2gIQmFyYmFkb3MHQmVsYXJ1cwdCZWxnaXVtBkJlbGl6ZQVCZW5pbgdCZXJtdWRhBkJodXRhbgdCb2xpdmlhFUJvc25pYWFuZCBIZXJ6ZWdvdmluYQhCb3Rzd2FuYQ1Cb3V2ZXQgaXNsYW5kBkJyYXppbB5Ccml0aXNoIEluZGlhbiBPY2VhbiBUZXJyaXRvcnkGQnJ1bmVpCEJ1bGdhcmlhDEJ1cmtpbmEgRmFzbwdCdXJ1bmRpCENhbWJvZGlhCENhbWVyb29uBkNhbmFkYQpDYXBlIHZlcmRlDkNheW1hbiBJc2xhbmRzGENlbnRyYWwgYWZyaWNhbiByZXB1YmxpYwRDaGFkBUNoaWxlBUNoaW5hEENocmlzdG1hcyBpc2xhbmQXQ29jb3MgKGtlZWxpbmcpIGlzbGFuZHMIQ29sb21iaWEHQ29tb3JvcwpDb25nbywgRFJDCkNvbmdvLCBST0MMQ29vayBpc2xhbmRzCkNvc3RhIFJpY2EHQ3JvYXRpYQRDdWJhB0N1cmFjYW8GQ3lwcnVzDkN6ZWNoIFJlcHVibGljB0Rlbm1hcmsIRGppYm91dGkIRG9taW5pY2ESRG9taW5pY2FuIFJlcHVibGljB0VjdWFkb3IFRWd5cHQMRWwgU2FsdmFkb3IgEUVxdWF0b3JpYWwgR3VpbmVhB0VyaXRyZWEHRXN0b25pYQhFdGhpb3BpYRNGLlkuUi4gb2YgTWFjZWRvbmlhG0ZhbGtsYW5kIGlzbGFuZHMgKG1hbHZpbmFzKQ1GYXJvZSBpc2xhbmRzDEZpamkgSXNsYW5kcwdGaW5sYW5kBkZyYW5jZQ1GcmVuY2ggR3VpYW5hEEZyZW5jaCBQb2x5bmVzaWEjRnJlbmNoIFNvdXRoZXJuIGFuZCBBbnRhcmN0aWMgTGFuZHMFR2Fib24GR2FtYmlhB0dlb3JnaWEHR2VybWFueQVHaGFuYQlHaWJyYWx0YXIGR3JlZWNlCUdyZWVubGFuZAdHcmVuYWRhCkd1YWRlbG91cGUER3VhbQlHdWF0ZW1hbGEIR3Vlcm5zZXkGR3VpbmVhDUd1aW5lYS1CaXNzYXUGR3V5YW5hBUhhaXRpIUhlYXJkIElzbGFuZCBhbmQgTWNEb25hbGQgSXNsYW5kcx1Ib2x5IHNlZSAodmF0aWNhbiBjaXR5IHN0YXRlKQhIb25kdXJhcw1Ib25nIEtvbmcgU0FSB0h1bmdhcnkHSWNlbGFuZAVJbmRpYQlJbmRvbmVzaWEESXJhbgRJcmFxB0lyZWxhbmQLSXNsZSBvZiBNYW4GSXNyYWVsBUl0YWx5C0l2b3J5IENvYXN0B0phbWFpY2EFSmFwYW4GSmVyc2V5BkpvcmRhbgpLYXpha2hzdGFuBUtlbnlhCEtpcmliYXRpBUtvcmVhDUtvcmVhIChOb3J0aCkGS3V3YWl0D0t5cmd5eiBSZXB1YmxpYwhMYW8sIFBEUgZMYXR2aWEHTGViYW5vbgdMZXNvdGhvB0xpYmVyaWEFTGlieWENTGllY2h0ZW5zdGVpbglMaXRodWFuaWEKTHV4ZW1ib3VyZwVNYWNhdQpNYWRhZ2FzY2FyBk1hbGF3aQhNYWxheXNpYQhNYWxkaXZlcwRNYWxpBU1hbHRhEE1hcnNoYWxsIGlzbGFuZHMKTWFydGluaXF1ZQpNYXVyaXRhbmlhCU1hdXJpdGl1cwdNYXlvdHRlBk1leGljbwpNaWNyb25lc2lhB01vbGRvdmEGTW9uYWNvCE1vbmdvbGlhCk1vbnRlbmVncm8KTW9udHNlcnJhdAdNb3JvY2NvCk1vemFtYmlxdWUHTXlhbm1hcgdOYW1pYmlhBU5hdXJ1BU5lcGFsC05ldGhlcmxhbmRzFE5ldGhlcmxhbmRzIEFudGlsbGVzDU5ldyBjYWxlZG9uaWELTmV3IFplYWxhbmQJTmljYXJhZ3VhBU5pZ2VyB05pZ2VyaWEETml1ZQ5Ob3Jmb2xrIGlzbGFuZBhOb3J0aGVybiBtYXJpYW5hIGlzbGFuZHMGTm9yd2F5BE9tYW4IUGFraXN0YW4FUGFsYXUVUGFsZXN0aW5pYW4gdGVycml0b3J5BlBhbmFtYRBQYXB1YSBOZXcgR3VpbmVhCFBhcmFndWF5BFBlcnULUGhpbGlwcGluZXMIUGl0Y2Fpcm4GUG9sYW5kCFBvcnR1Z2FsC1B1ZXJ0byBSaWNvBVFhdGFyB1JldW5pb24HUm9tYW5pYQZSdXNzaWEGUndhbmRhDFNhaW50IGhlbGVuYRVTYWludCBraXR0cyBhbmQgbmV2aXMLU2FpbnQgbHVjaWEZU2FpbnQgcGllcnJlIGFuZCBtaXF1ZWxvbh5TYWludCB2aW5jZW50ICYgdGhlIGdyZW5hZGluZXMRU2FpbnQtQmFydGjDqWxlbXkaU2FpbnQtTWFydGluIChGcmVuY2ggcGFydCkKU2FuIE1hcmlubxVTYW8gdG9tZSBhbmQgcHJpbmNpcGUMU2F1ZGkgQXJhYmlhB1NlbmVnYWwGU2VyYmlhFVNlcmJpYSBhbmQgbW9udGVuZWdybxFTZXljaGVsbGUgSXNsYW5kcwxTaWVycmEgTGVvbmUJU2luZ2Fwb3JlD1Nsb3ZhayBSZXB1YmxpYwhTbG92ZW5pYQ9Tb2xvbW9uIGlzbGFuZHMHU29tYWxpYQxTb3V0aCBBZnJpY2EsU291dGggR2VvcmdpYSBhbmQgdGhlIFNvdXRoIFNhbmR3aWNoIElzbGFuZHMLU291dGggU3VkYW4FU3BhaW4IU3JpTGFua2EFU3VkYW4IU3VyaW5hbWUWU3ZhbGJhcmQgYW5kIGphbiBtYXllbglTd2F6aWxhbmQGU3dlZGVuC1N3aXR6ZXJsYW5kBVN5cmlhBlRhaXdhbgpUYWppa2lzdGFuCFRhbnphbmlhCFRoYWlsYW5kC1RpbW9yLWxlc3RlBFRvZ28HVG9rZWxhdQVUb25nYRNUcmluaWRhZCBhbmQgVG9iYWdvB1R1bmlzaWEGVHVya2V5DFR1cmttZW5pc3RhbhhUdXJrcyBhbmQgY2FpY29zIGlzbGFuZHMGVHV2YWx1ElUuUy5WaXJnaW4gSXNsYW5kcwZVZ2FuZGEHVWtyYWluZRRVbml0ZWQgQXJhYiBFbWlyYXRlcw5Vbml0ZWQgS2luZ2RvbQ1Vbml0ZWQgU3RhdGVzB1VydWd1YXkZVVMgbWlub3Igb3V0bHlpbmcgaXNsYW5kcwpVemJla2lzdGFuB1ZhbnVhdHUJVmVuZXp1ZWxhB1ZpZXRuYW0XVmlyZ2luIGlzbGFuZHMsIGJyaXRpc2gRV2FsbGlzIGFuZCBmdXR1bmEOV2VzdGVybiBzYWhhcmENV2VzdGVybiBTYW1vYQVZZW1lbgZaYW1iaWEIWmltYmFid2UV+wEAATABMQMzMDMBNgE3ATgBOQIxMAMyNDADMjQxAjEyAjEzAjE0AzI0MgIxNwIxOQIyMAIyMQIyMgIyMwIyNAIyNgIyNwIyOAIyOQIzMAMyNDMCMzICMzMCMzQDMjQ0AjM1AzMwMQIzNwIzOAIzOQI0MAI0MQI0MgI0MwMyNTACNDUDMjQ3AjQ3AjQ4AjQ5AzI1MQMyNDUCNTIDMjYxAzI0NgI1NAMyNDgCNTcCNTgCNTkDMzA3AjYwAjYxAjYyAjY0AzI1MgI2NgI2NwI2OAI2OQI3MAI3MQI3MgI3MwI3NAMyNTQDMjU1Ajc3Ajc4Ajc5AjgxAjgyAzMwMgI4MwI4NAI4NQI4NgI4NwI4OAI4OQI5MAMyNTYCOTICOTMCOTUDMjk4Ajk3Ajk2Ajk4Ajk5AzMwMAMyODgDMTAwAzEwMQMxMDIDMTAzAzEwNAMxMDUDMTEyAzExMwMxMTQDMjk2AzExNQMxMTYDMTE3AzExOAMxMTkDMjk3AzEyMAMxMjEDMTIyAzI2MAMxMjUDMTI0AzIzNAMxMjYDMjYzAzEyOAMxMjkDMTMwAzEzMQMxMzIDMTMzAzEzNAMxMzUDMTM2AzEzNwMxMzgDMTM5AzE0MAMxNDEDMTQyAzI2NQMxNDQDMTQ1AzE0NgMyOTMDMTQ4AzE0OQMxNTADMTUxAzE1MgMyOTUDMjY3AzE1NAMxNTUDMTU2AzE1NwMyNzADMTU5AzE2MAMxNjEDMjY4AzE2NAMxNjUDMTY2AzE2NwMyNzEDMjY5AzI2NgMxNzADMTcxAzE3MgMyNzUDMjc0AzE3NAMxNzUDMTc2AzE3NwMxNzgDMjczAzE3OQMxODADMTgxAzE4MgMyNzYDMTg0AzE4NgMxODcDMjc4AzI2MgMyNjQDMjcyAzI4OQMzMDQDMzA1AzE5MAMyODADMTkyAzE5MwMyOTQDMjQ5AzE5NAMxOTUDMTk2AzE5NwE1AzI3NwEzATIDMjk5AzMwNgMxOTgDMTk5AzIwNAMyMDUDMjc5AzIwNgMyMDcDMjA4AzIwOQMyMTADMjExAzIxMgMyMTMDMjg0AzIxNQMyODMDMjg1AzIxOAMyMTkDMjIwAzIyMQMyODEDMjg2AzIyOQMyMjQDMjI1AzIyNgMyMjcDMjI4AzIzMAMyODcCMTgDMjkxAjU1AzIzMwMyOTADMjkyAzI1MwMyMzUDMjM2AzIzOAMyMzkUKwP7AWdnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnFgFmZAIiDxUBATFkAiMPZBYGZg8VAgEyATJkAgEPZBYCAgIPZBYMAgQPZBYCAgEPFgIeBWNsYXNzBR9oaWRkZW5jb250cm9scyBjb2wtMTIgIHRyLXRhYmxlFgQCAw8WAh8BaGQCBw8PFgIeB0VuYWJsZWRoZGQCBQ8WAh8BaBYCAgEPFgIfBAUfaGlkZGVuY29udHJvbHMgY29sLTEyICB0ci10YWJsZRYCAgMPDxYCHwNkZGQCBg9kFgICAQ8WAh8EBR9oaWRkZW5jb250cm9scyBjb2wtMTIgIHRyLXRhYmxlFgQCAw8WAh8BaGQCBw8PFgIfBWhkZAIHD2QWAgIBDxYCHwQFH2hpZGRlbmNvbnRyb2xzIGNvbC0xMiAgdHItdGFibGUWBAIDDxYCHwFoZAIHDw8WAh8FaGRkAggPZBYCZg8WBB8EBR9oaWRkZW5jb250cm9scyBjb2wtMTIgIHRyLXRhYmxlHgVzdHlsZQUMZGlzcGxheTpub25lFgYCAw8WAh8BaGQCBQ8QZBAV+wEAAAtBZmdoYW5pc3Rhbg1BbGFuZCBJc2xhbmRzB0FsYmFuaWEHQWxnZXJpYQ5BbWVyaWNhbiBTYW1vYQdBbmRvcnJhBkFuZ29sYQhBbmd1aWxsYQpBbnRhcmN0aWNhB0FudGlndWEJQXJnZW50aW5hB0FybWVuaWEFQXJ1YmEJQXVzdHJhbGlhB0F1c3RyaWEKQXplcmJhaWphbgdCYWhhbWFzB0JhaHJhaW4KQmFuZ2xhZGVzaAhCYXJiYWRvcwdCZWxhcnVzB0JlbGdpdW0GQmVsaXplBUJlbmluB0Jlcm11ZGEGQmh1dGFuB0JvbGl2aWEVQm9zbmlhYW5kIEhlcnplZ292aW5hCEJvdHN3YW5hDUJvdXZldCBpc2xhbmQGQnJhemlsHkJyaXRpc2ggSW5kaWFuIE9jZWFuIFRlcnJpdG9yeQZCcnVuZWkIQnVsZ2FyaWEMQnVya2luYSBGYXNvB0J1cnVuZGkIQ2FtYm9kaWEIQ2FtZXJvb24GQ2FuYWRhCkNhcGUgdmVyZGUOQ2F5bWFuIElzbGFuZHMYQ2VudHJhbCBhZnJpY2FuIHJlcHVibGljBENoYWQFQ2hpbGUFQ2hpbmEQQ2hyaXN0bWFzIGlzbGFuZBdDb2NvcyAoa2VlbGluZykgaXNsYW5kcwhDb2xvbWJpYQdDb21vcm9zCkNvbmdvLCBEUkMKQ29uZ28sIFJPQwxDb29rIGlzbGFuZHMKQ29zdGEgUmljYQdDcm9hdGlhBEN1YmEHQ3VyYWNhbwZDeXBydXMOQ3plY2ggUmVwdWJsaWMHRGVubWFyawhEamlib3V0aQhEb21pbmljYRJEb21pbmljYW4gUmVwdWJsaWMHRWN1YWRvcgVFZ3lwdAxFbCBTYWx2YWRvciARRXF1YXRvcmlhbCBHdWluZWEHRXJpdHJlYQdFc3RvbmlhCEV0aGlvcGlhE0YuWS5SLiBvZiBNYWNlZG9uaWEbRmFsa2xhbmQgaXNsYW5kcyAobWFsdmluYXMpDUZhcm9lIGlzbGFuZHMMRmlqaSBJc2xhbmRzB0ZpbmxhbmQGRnJhbmNlDUZyZW5jaCBHdWlhbmEQRnJlbmNoIFBvbHluZXNpYSNGcmVuY2ggU291dGhlcm4gYW5kIEFudGFyY3RpYyBMYW5kcwVHYWJvbgZHYW1iaWEHR2VvcmdpYQdHZXJtYW55BUdoYW5hCUdpYnJhbHRhcgZHcmVlY2UJR3JlZW5sYW5kB0dyZW5hZGEKR3VhZGVsb3VwZQRHdWFtCUd1YXRlbWFsYQhHdWVybnNleQZHdWluZWENR3VpbmVhLUJpc3NhdQZHdXlhbmEFSGFpdGkhSGVhcmQgSXNsYW5kIGFuZCBNY0RvbmFsZCBJc2xhbmRzHUhvbHkgc2VlICh2YXRpY2FuIGNpdHkgc3RhdGUpCEhvbmR1cmFzDUhvbmcgS29uZyBTQVIHSHVuZ2FyeQdJY2VsYW5kBUluZGlhCUluZG9uZXNpYQRJcmFuBElyYXEHSXJlbGFuZAtJc2xlIG9mIE1hbgZJc3JhZWwFSXRhbHkLSXZvcnkgQ29hc3QHSmFtYWljYQVKYXBhbgZKZXJzZXkGSm9yZGFuCkthemFraHN0YW4FS2VueWEIS2lyaWJhdGkFS29yZWENS29yZWEgKE5vcnRoKQZLdXdhaXQPS3lyZ3l6IFJlcHVibGljCExhbywgUERSBkxhdHZpYQdMZWJhbm9uB0xlc290aG8HTGliZXJpYQVMaWJ5YQ1MaWVjaHRlbnN0ZWluCUxpdGh1YW5pYQpMdXhlbWJvdXJnBU1hY2F1Ck1hZGFnYXNjYXIGTWFsYXdpCE1hbGF5c2lhCE1hbGRpdmVzBE1hbGkFTWFsdGEQTWFyc2hhbGwgaXNsYW5kcwpNYXJ0aW5pcXVlCk1hdXJpdGFuaWEJTWF1cml0aXVzB01heW90dGUGTWV4aWNvCk1pY3JvbmVzaWEHTW9sZG92YQZNb25hY28ITW9uZ29saWEKTW9udGVuZWdybwpNb250c2VycmF0B01vcm9jY28KTW96YW1iaXF1ZQdNeWFubWFyB05hbWliaWEFTmF1cnUFTmVwYWwLTmV0aGVybGFuZHMUTmV0aGVybGFuZHMgQW50aWxsZXMNTmV3IGNhbGVkb25pYQtOZXcgWmVhbGFuZAlOaWNhcmFndWEFTmlnZXIHTmlnZXJpYQROaXVlDk5vcmZvbGsgaXNsYW5kGE5vcnRoZXJuIG1hcmlhbmEgaXNsYW5kcwZOb3J3YXkET21hbghQYWtpc3RhbgVQYWxhdRVQYWxlc3RpbmlhbiB0ZXJyaXRvcnkGUGFuYW1hEFBhcHVhIE5ldyBHdWluZWEIUGFyYWd1YXkEUGVydQtQaGlsaXBwaW5lcwhQaXRjYWlybgZQb2xhbmQIUG9ydHVnYWwLUHVlcnRvIFJpY28FUWF0YXIHUmV1bmlvbgdSb21hbmlhBlJ1c3NpYQZSd2FuZGEMU2FpbnQgaGVsZW5hFVNhaW50IGtpdHRzIGFuZCBuZXZpcwtTYWludCBsdWNpYRlTYWludCBwaWVycmUgYW5kIG1pcXVlbG9uHlNhaW50IHZpbmNlbnQgJiB0aGUgZ3JlbmFkaW5lcxFTYWludC1CYXJ0aMOpbGVteRpTYWludC1NYXJ0aW4gKEZyZW5jaCBwYXJ0KQpTYW4gTWFyaW5vFVNhbyB0b21lIGFuZCBwcmluY2lwZQxTYXVkaSBBcmFiaWEHU2VuZWdhbAZTZXJiaWEVU2VyYmlhIGFuZCBtb250ZW5lZ3JvEVNleWNoZWxsZSBJc2xhbmRzDFNpZXJyYSBMZW9uZQlTaW5nYXBvcmUPU2xvdmFrIFJlcHVibGljCFNsb3ZlbmlhD1NvbG9tb24gaXNsYW5kcwdTb21hbGlhDFNvdXRoIEFmcmljYSxTb3V0aCBHZW9yZ2lhIGFuZCB0aGUgU291dGggU2FuZHdpY2ggSXNsYW5kcwtTb3V0aCBTdWRhbgVTcGFpbghTcmlMYW5rYQVTdWRhbghTdXJpbmFtZRZTdmFsYmFyZCBhbmQgamFuIG1heWVuCVN3YXppbGFuZAZTd2VkZW4LU3dpdHplcmxhbmQFU3lyaWEGVGFpd2FuClRhamlraXN0YW4IVGFuemFuaWEIVGhhaWxhbmQLVGltb3ItbGVzdGUEVG9nbwdUb2tlbGF1BVRvbmdhE1RyaW5pZGFkIGFuZCBUb2JhZ28HVHVuaXNpYQZUdXJrZXkMVHVya21lbmlzdGFuGFR1cmtzIGFuZCBjYWljb3MgaXNsYW5kcwZUdXZhbHUSVS5TLlZpcmdpbiBJc2xhbmRzBlVnYW5kYQdVa3JhaW5lFFVuaXRlZCBBcmFiIEVtaXJhdGVzDlVuaXRlZCBLaW5nZG9tDVVuaXRlZCBTdGF0ZXMHVXJ1Z3VheRlVUyBtaW5vciBvdXRseWluZyBpc2xhbmRzClV6YmVraXN0YW4HVmFudWF0dQlWZW5lenVlbGEHVmlldG5hbRdWaXJnaW4gaXNsYW5kcywgYnJpdGlzaBFXYWxsaXMgYW5kIGZ1dHVuYQ5XZXN0ZXJuIHNhaGFyYQ1XZXN0ZXJuIFNhbW9hBVllbWVuBlphbWJpYQhaaW1iYWJ3ZRX7AQABMAExAzMwMwE2ATcBOAE5AjEwAzI0MAMyNDECMTICMTMCMTQDMjQyAjE3AjE5AjIwAjIxAjIyAjIzAjI0AjI2AjI3AjI4AjI5AjMwAzI0MwIzMgIzMwIzNAMyNDQCMzUDMzAxAjM3AjM4AjM5AjQwAjQxAjQyAjQzAzI1MAI0NQMyNDcCNDcCNDgCNDkDMjUxAzI0NQI1MgMyNjEDMjQ2AjU0AzI0OAI1NwI1OAI1OQMzMDcCNjACNjECNjICNjQDMjUyAjY2AjY3AjY4AjY5AjcwAjcxAjcyAjczAjc0AzI1NAMyNTUCNzcCNzgCNzkCODECODIDMzAyAjgzAjg0Ajg1Ajg2Ajg3Ajg4Ajg5AjkwAzI1NgI5MgI5MwI5NQMyOTgCOTcCOTYCOTgCOTkDMzAwAzI4OAMxMDADMTAxAzEwMgMxMDMDMTA0AzEwNQMxMTIDMTEzAzExNAMyOTYDMTE1AzExNgMxMTcDMTE4AzExOQMyOTcDMTIwAzEyMQMxMjIDMjYwAzEyNQMxMjQDMjM0AzEyNgMyNjMDMTI4AzEyOQMxMzADMTMxAzEzMgMxMzMDMTM0AzEzNQMxMzYDMTM3AzEzOAMxMzkDMTQwAzE0MQMxNDIDMjY1AzE0NAMxNDUDMTQ2AzI5MwMxNDgDMTQ5AzE1MAMxNTEDMTUyAzI5NQMyNjcDMTU0AzE1NQMxNTYDMTU3AzI3MAMxNTkDMTYwAzE2MQMyNjgDMTY0AzE2NQMxNjYDMTY3AzI3MQMyNjkDMjY2AzE3MAMxNzEDMTcyAzI3NQMyNzQDMTc0AzE3NQMxNzYDMTc3AzE3OAMyNzMDMTc5AzE4MAMxODEDMTgyAzI3NgMxODQDMTg2AzE4NwMyNzgDMjYyAzI2NAMyNzIDMjg5AzMwNAMzMDUDMTkwAzI4MAMxOTIDMTkzAzI5NAMyNDkDMTk0AzE5NQMxOTYDMTk3ATUDMjc3ATMBMgMyOTkDMzA2AzE5OAMxOTkDMjA0AzIwNQMyNzkDMjA2AzIwNwMyMDgDMjA5AzIxMAMyMTEDMjEyAzIxMwMyODQDMjE1AzI4MwMyODUDMjE4AzIxOQMyMjADMjIxAzI4MQMyODYDMjI5AzIyNAMyMjUDMjI2AzIyNwMyMjgDMjMwAzI4NwIxOAMyOTECNTUDMjMzAzI5MAMyOTIDMjUzAzIzNQMyMzYDMjM4AzIzORQrA/sBZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2cWAQJ0ZAIHDw8WAh8FaGRkAgkPFgIfAWgWAgIBDxYCHwQFH2hpZGRlbmNvbnRyb2xzIGNvbC0xMiAgdHItdGFibGUWBAIDDxYCHwFoZAIFD2QWAmYPZBYEAgEPEA8WCB4JQ291bnRyeUlEAnkeDURhdGFUZXh0RmllbGQFBE5hbWUeDkRhdGFWYWx1ZUZpZWxkBQJJRB8FaGQQFQEAFQEAFCsDAWcWAWZkAgMPDxYCHwVoZGQCAg8VAQEyZAIlDw8WAh4NT25DbGllbnRDbGljawVraWYodmFsaWRhdGVBbGxTZWN0aW9ucygpKSB7X19kb1Bvc3RCYWNrKCdjdGwwMCRjdGwwMCRib2R5JGJvZHkkcGF5Q29udHJvbCcsJycpO30gUGFnZV9CbG9ja1N1Ym1pdCA9IGZhbHNlOyBkZAIFDxYCHwNlZAIVDw8WAh8BaGRkAhcPDxYCHwFoZGQCBQ8WAh8DBStSZW1pdEV4IC0gQ29tcGxldGUgT25saW5lIFBheW1lbnQgU29sdXRpb25zZGQVMNttybIct71Zs5xmZwmWn01ARg==" />
+
+
+		<script type="text/javascript">
+			//<![CDATA[
+$(function() {
+$('#ctl00_ctl00_wc2LanguageSelector').click(function () {
+if ($('#ctl00_ctl00_wc2LanguageSelector_Popup').css('display') == 'none') $('#ctl00_ctl00_wc2LanguageSelector_Popup').show();
+else $('#ctl00_ctl00_wc2LanguageSelector_Popup').hide();
+});
+$(document).mouseup(function () { $('#ctl00_ctl00_wc2LanguageSelector_Popup').hide(); });
+});//]]>
+		</script>
+
+		<script
+			src="/ScriptResource.axd?d=dtGFWkcvHK7LjJX8KWr1uEiM7tFm_JHvp3p3GOym0PH8Fo0zM9A524IjdCRuG8LejOLTuYVmgf3_5TF0RUvvHmR4fQOgat5nrQNvKZnYY7u9QGzNQbDkfH9N3JrSO-t3HP6rhrQPwABs69Z1JT4c_7YFPDhMqj78wZRZeqYfe7s5gksl0&amp;t=363be08"
+			type="text/javascript"></script>
+		<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="E1B5D055" />
+
+		<div id="wrap" class="container">
+			<div class="header-top">
+
+
+			</div>
+
+			<div id="container">
+
+
+				<div class="full-page">
+
+					<div class="">
+						<div class="row col-md-6 col-md-offset-3 col-sm-12 col-xs-12 details">
+							<div class="side-text">
+
+								<div class="col-md-12 col-sm-12 col-xs-12">
+
+									<div class="order-product">Order details </div>
+									<div class="text-product"> </div>
+
+									<div class="spacer"></div>
+									<div class="line-hr"></div>
+									<div>
+
+										<hr class="line-hr" />
+									</div>
+									<div class="spacer"></div>
+									<div class="line-hr"></div>
+
+
+								</div>
+								<div class="col-md-12 col-sm-12 col-xs-12"
+									style="border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;">
+									<div class="summary-line">
+										<div class="summary-text">Total<span class="transaction-amount">€7,777.00</span>
+
+										</div>
+
+									</div>
+								</div>
+
+
+
+							</div>
+
+						</div>
+
+
+
+						<div class="row col-md-6 col-md-offset-3 col-sm-12 col-xs-12 details-payment">
+							<div class="row">
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div id="content">
+
+
+										<div class="MerchantTopText">
+
+										</div>
+
+
+										<script type="text/javascript">
+											var currentTabIndex = 1;
+    var maxStep = 0;
+
+    function _setCountryCode() {
+        $('#txtPhone').val($('.iti__selected-dial-code').text() + $('#txtPhone').val());
+    }
+
+    function validateAllSections() {
+        //alert(111)
+        _setCountryCode();
+        var sListSectios = ["any","BillingAddress", "PaymentForm"];
+        var bAny = true;
+        var bRetBilling = Page_ClientValidate(sListSectios[1]);
+        var bRetPayment = Page_ClientValidate(sListSectios[0]);
+
+        return (bAny && bRetBilling && bRetPayment);
+    }
+
+    //HPP-16 
+    function _checkAndShow() {
+        setTimeout(function () {
+            
+            ///BillingAddress
+            if (!$('#vBillingAddress').attr('isvalid')) {
+                var ctrlName = $('#vBillingAddress').attr('controltovalidate');
+                $('#' + $('#' + $('#vBillingAddress').attr('controltovalidate')).parent().parent().attr('id')).show();
+            }
+
+            if (!$('#vBillingAddressCity').attr('isvalid')) {
+                var ctrlName = $('#vBillingAddressCity').attr('controltovalidate');
+                $('#' + $('#' + $('#vBillingAddressCity').attr('controltovalidate')).parent().parent().attr('id')).show();
+            }
+
+            if (!$('#vBillingAddressZipcode').attr('isvalid')) {
+                var ctrlName = $('#vBillingAddressZipcode').attr('controltovalidate');
+                $('#' + $('#' + $('#vBillingAddressZipcode').attr('controltovalidate')).parent().parent().attr('id')).show();
+            }
+
+            if (!$('#vBillingAddressCountry').attr('isvalid')) {
+                var ctrlName = $('#vBillingAddressCountry').attr('controltovalidate');
+                $('#' + $('#' + $('#vBillingAddressCountry').attr('controltovalidate')).parent().parent().attr('id')).show();
+            }
+
+            if (!$('#vBillingAddressState').attr('isvalid')) {
+                var ctrlName = $('#vBillingAddressState').attr('controltovalidate');
+                $('#' + $('#' + $('#vBillingAddressState').attr('controltovalidate')).parent().parent().attr('id')).show();
+            }
+            
+
+            ///Personal Details            
+            if (!$('#vRegEmail').attr('isvalid')) {
+                var ctrlName = $('#vRegEmail').attr('controltovalidate');
+                $('#' + $('#' + $('#vRegEmail').attr('controltovalidate')).parent().parent().attr('id')).show();
+            }
+            if (!$('#vEMailValidator').attr('isvalid')) {
+                var ctrlName = $('#vEMailValidator').attr('controltovalidate');
+                $('#' + $('#' + $('#vEMailValidator').attr('controltovalidate')).parent().parent().attr('id')).show();
+            }
+            if (!$('#vCardholderID').attr('isvalid')) {
+                var ctrlName = $('#vCardholderID').attr('controltovalidate');
+                $('#' + $('#' + $('#vCardholderID').attr('controltovalidate')).parent().parent().attr('id')).show();
+            }
+            if (!$('#vPhoneValidator').attr('isvalid')) {
+                var ctrlName = $('#vPhoneValidator').attr('controltovalidate');
+                $('#' + $('#' + $('#vPhoneValidator').attr('controltovalidate')).parent().parent().attr('id')).show();
+            }
+            if (!$('#vFullName').attr('isvalid')) {
+                var ctrlName = $('#vFullName').attr('controltovalidate');
+                $('#' + $('#' + $('#vFullName').attr('controltovalidate')).parent().parent().attr('id')).show();
+            }
+
+        }, 500);
+    }
+
+    function validateSection(validationGroup, sectionId) {
+        var ret = Page_ClientValidate(validationGroup);
+        if (ret) {
+            $("#tick-section-0" + sectionId).fadeIn();
+            openSection(sectionId + 1, true);
+        } else {
+            $("#tick-section-0" + sectionId).fadeOut();
+            //HPP-16 
+            _checkAndopen();
+        }
+        return ret;
+    }
+
+    function openSection(sectionId, approve) {
+        if (maxStep == 0)
+            for (maxStep = 1; document.getElementById('section-0' + maxStep) ; maxStep++);
+        if (currentTabIndex == sectionId) return;
+        if (!approve && currentTabIndex < sectionId) return;
+        if (sectionId >= maxStep) return;
+
+        $("#section-0" + currentTabIndex).slideUp();
+        $("#section-0" + sectionId).slideDown();
+
+        $("[class ^= arrow]").attr("class", "arrow-close");
+        $("#click-selesction-0" + sectionId + " > [class ^= arrow]").attr("class", "arrow");
+        for (var i = 1; i <= maxStep; i++)
+            $("#image_step" + i).attr('class', 'step-0' + i + (i <= sectionId ? '-on' : '-off'));
+
+        currentTabIndex = sectionId
+    }
+
+    $(document).ready(function(){
+        $(".tr-table").show();   
+    })
+
+										</script>
+
+										<div id="step">
+											<span id="image_step1" class="step-01-on"></span><span id="image_step2" class="step-02-off"></span>
+										</div>
+
+										<div class="wrap-accordion">
+											<div id="step-01">
+
+												<div id="section-01" class="content-section">
+
+
+
+
+
+
+
+													<div class="table-section">
+
+														<!--fullname-->
+														<div class="col-md-12">
+															<div class="tr-table">
+																<div class="td-cell-text">
+																	Full Name<span class="asterisk"> *</span>
+																</div>
+																<div class="td-cell">
+																	<input name="ctl00$ctl00$body$body$payControl$txtFullName" value="Dima" id="ctl00_ctl00_body_body_payControl_txtFullName" class="field_385 contains _space req" autofocus="autofocus" type="text" required="required" />
+
+                    </div>
+																</div>
+															</div>
+															<!--email-->
+															<div class="col-md-12">
+																<div class="tr-table">
+																	<div class="td-cell-text">
+																		Email Address:
+																		<span id="ctl00_ctl00_body_body_payControl_spanEmailRequired" class="asterisk"> *</span>
+																	</div>
+																	<div class="td-cell">
+																		<input name="ctl00$ctl00$body$body$payControl$txtEmail" maxlength="255" id="ctl00_ctl00_body_body_payControl_txtEmail" type="email" required="required" placeholder="Example@example.com" class="field_385 email req" />
+
+					</div>
+																	</div>
+																</div>
+																<!--phone number-->
+																<div class="col-md-12">
+																	<div class="tr-table">
+																		<div class="td-cell-text">
+																			Phone
+																			Number:<span class="asterisk"> *</span>
+																		</div>
+																		<div class="td-cell">
+																			<input name="ctl00$ctl00$body$body$payControl$txtPhone" type="text" id="txtPhone" class="field_385 txtPhone tel req" onkeydown="limitphone(this);" onkeyup="limitphone(this);" required="required" inputmode="decimal" />
+
+                    </div>
+																		</div>
+																	</div>
+																	<!-- transfer funds source country -->
+																	<div class="col-md-6">
+																		<div class="tr-table">
+																			<div class="td-cell-text">
+																				Origin country of
+																				funds<span class="asterisk"> *</span>
+																			</div>
+																			<div class="td-cell">
+																				<select name="ctl00$ctl00$body$body$payControl$ddlSourceCountry" id="ddlSourceCountry" required="required">
+	<option selected="selected" value="" class="emptyOption"></option>
+	<option value="0"></option>
+	<option value="1">Afghanistan</option>
+	<option value="303">Aland Islands</option>
+	<option value="6">Albania</option>
+	<option value="7">Algeria</option>
+	<option value="8">American Samoa</option>
+	<option value="9">Andorra</option>
+	<option value="10">Angola</option>
+	<option value="240">Anguilla</option>
+	<option value="241">Antarctica</option>
+	<option value="12">Antigua</option>
+	<option value="13">Argentina</option>
+	<option value="14">Armenia</option>
+	<option value="242">Aruba</option>
+	<option value="17">Australia</option>
+	<option value="19">Austria</option>
+	<option value="20">Azerbaijan</option>
+	<option value="21">Bahamas</option>
+	<option value="22">Bahrain</option>
+	<option value="23">Bangladesh</option>
+	<option value="24">Barbados</option>
+	<option value="26">Belarus</option>
+	<option value="27">Belgium</option>
+	<option value="28">Belize</option>
+	<option value="29">Benin</option>
+	<option value="30">Bermuda</option>
+	<option value="243">Bhutan</option>
+	<option value="32">Bolivia</option>
+	<option value="33">Bosniaand Herzegovina</option>
+	<option value="34">Botswana</option>
+	<option value="244">Bouvet island</option>
+	<option value="35">Brazil</option>
+	<option value="301">British Indian Ocean Territory</option>
+	<option value="37">Brunei</option>
+	<option value="38">Bulgaria</option>
+	<option value="39">Burkina Faso</option>
+	<option value="40">Burundi</option>
+	<option value="41">Cambodia</option>
+	<option value="42">Cameroon</option>
+	<option value="43">Canada</option>
+	<option value="250">Cape verde</option>
+	<option value="45">Cayman Islands</option>
+	<option value="247">Central african republic</option>
+	<option value="47">Chad</option>
+	<option value="48">Chile</option>
+	<option value="49">China</option>
+	<option value="251">Christmas island</option>
+	<option value="245">Cocos (keeling) islands</option>
+	<option value="52">Colombia</option>
+	<option value="261">Comoros</option>
+	<option value="246">Congo, DRC</option>
+	<option value="54">Congo, ROC</option>
+	<option value="248">Cook islands</option>
+	<option value="57">Costa Rica</option>
+	<option value="58">Croatia</option>
+	<option value="59">Cuba</option>
+	<option value="307">Curacao</option>
+	<option value="60">Cyprus</option>
+	<option value="61">Czech Republic</option>
+	<option value="62">Denmark</option>
+	<option value="64">Djibouti</option>
+	<option value="252">Dominica</option>
+	<option value="66">Dominican Republic</option>
+	<option value="67">Ecuador</option>
+	<option value="68">Egypt</option>
+	<option value="69">El Salvador </option>
+	<option value="70">Equatorial Guinea</option>
+	<option value="71">Eritrea</option>
+	<option value="72">Estonia</option>
+	<option value="73">Ethiopia</option>
+	<option value="74">F.Y.R. of Macedonia</option>
+	<option value="254">Falkland islands (malvinas)</option>
+	<option value="255">Faroe islands</option>
+	<option value="77">Fiji Islands</option>
+	<option value="78">Finland</option>
+	<option value="79">France</option>
+	<option value="81">French Guiana</option>
+	<option value="82">French Polynesia</option>
+	<option value="302">French Southern and Antarctic Lands</option>
+	<option value="83">Gabon</option>
+	<option value="84">Gambia</option>
+	<option value="85">Georgia</option>
+	<option value="86">Germany</option>
+	<option value="87">Ghana</option>
+	<option value="88">Gibraltar</option>
+	<option value="89">Greece</option>
+	<option value="90">Greenland</option>
+	<option value="256">Grenada</option>
+	<option value="92">Guadeloupe</option>
+	<option value="93">Guam</option>
+	<option value="95">Guatemala</option>
+	<option value="298">Guernsey</option>
+	<option value="97">Guinea</option>
+	<option value="96">Guinea-Bissau</option>
+	<option value="98">Guyana</option>
+	<option value="99">Haiti</option>
+	<option value="300">Heard Island and McDonald Islands</option>
+	<option value="288">Holy see (vatican city state)</option>
+	<option value="100">Honduras</option>
+	<option value="101">Hong Kong SAR</option>
+	<option value="102">Hungary</option>
+	<option value="103">Iceland</option>
+	<option value="104">India</option>
+	<option value="105">Indonesia</option>
+	<option value="112">Iran</option>
+	<option value="113">Iraq</option>
+	<option value="114">Ireland</option>
+	<option value="296">Isle of Man</option>
+	<option value="115">Israel</option>
+	<option value="116">Italy</option>
+	<option value="117">Ivory Coast</option>
+	<option value="118">Jamaica</option>
+	<option value="119">Japan</option>
+	<option value="297">Jersey</option>
+	<option value="120">Jordan</option>
+	<option value="121">Kazakhstan</option>
+	<option value="122">Kenya</option>
+	<option value="260">Kiribati</option>
+	<option value="125">Korea</option>
+	<option value="124">Korea (North)</option>
+	<option value="234">Kuwait</option>
+	<option value="126">Kyrgyz Republic</option>
+	<option value="263">Lao, PDR</option>
+	<option value="128">Latvia</option>
+	<option value="129">Lebanon</option>
+	<option value="130">Lesotho</option>
+	<option value="131">Liberia</option>
+	<option value="132">Libya</option>
+	<option value="133">Liechtenstein</option>
+	<option value="134">Lithuania</option>
+	<option value="135">Luxembourg</option>
+	<option value="136">Macau</option>
+	<option value="137">Madagascar</option>
+	<option value="138">Malawi</option>
+	<option value="139">Malaysia</option>
+	<option value="140">Maldives</option>
+	<option value="141">Mali</option>
+	<option value="142">Malta</option>
+	<option value="265">Marshall islands</option>
+	<option value="144">Martinique</option>
+	<option value="145">Mauritania</option>
+	<option value="146">Mauritius</option>
+	<option value="293">Mayotte</option>
+	<option value="148">Mexico</option>
+	<option value="149">Micronesia</option>
+	<option value="150">Moldova</option>
+	<option value="151">Monaco</option>
+	<option value="152">Mongolia</option>
+	<option value="295">Montenegro</option>
+	<option value="267">Montserrat</option>
+	<option value="154">Morocco</option>
+	<option value="155">Mozambique</option>
+	<option value="156">Myanmar</option>
+	<option value="157">Namibia</option>
+	<option value="270">Nauru</option>
+	<option value="159">Nepal</option>
+	<option value="160">Netherlands</option>
+	<option value="161">Netherlands Antilles</option>
+	<option value="268">New caledonia</option>
+	<option value="164">New Zealand</option>
+	<option value="165">Nicaragua</option>
+	<option value="166">Niger</option>
+	<option value="167">Nigeria</option>
+	<option value="271">Niue</option>
+	<option value="269">Norfolk island</option>
+	<option value="266">Northern mariana islands</option>
+	<option value="170">Norway</option>
+	<option value="171">Oman</option>
+	<option value="172">Pakistan</option>
+	<option value="275">Palau</option>
+	<option value="274">Palestinian territory</option>
+	<option value="174">Panama</option>
+	<option value="175">Papua New Guinea</option>
+	<option value="176">Paraguay</option>
+	<option value="177">Peru</option>
+	<option value="178">Philippines</option>
+	<option value="273">Pitcairn</option>
+	<option value="179">Poland</option>
+	<option value="180">Portugal</option>
+	<option value="181">Puerto Rico</option>
+	<option value="182">Qatar</option>
+	<option value="276">Reunion</option>
+	<option value="184">Romania</option>
+	<option value="186">Russia</option>
+	<option value="187">Rwanda</option>
+	<option value="278">Saint helena</option>
+	<option value="262">Saint kitts and nevis</option>
+	<option value="264">Saint lucia</option>
+	<option value="272">Saint pierre and miquelon</option>
+	<option value="289">Saint vincent &amp; the grenadines</option>
+	<option value="304">Saint-Barth&#233;lemy</option>
+	<option value="305">Saint-Martin (French part)</option>
+	<option value="190">San Marino</option>
+	<option value="280">Sao tome and principe</option>
+	<option value="192">Saudi Arabia</option>
+	<option value="193">Senegal</option>
+	<option value="294">Serbia</option>
+	<option value="249">Serbia and montenegro</option>
+	<option value="194">Seychelle Islands</option>
+	<option value="195">Sierra Leone</option>
+	<option value="196">Singapore</option>
+	<option value="197">Slovak Republic</option>
+	<option value="5">Slovenia</option>
+	<option value="277">Solomon islands</option>
+	<option value="3">Somalia</option>
+	<option value="2">South Africa</option>
+	<option value="299">South Georgia and the South Sandwich Islands</option>
+	<option value="306">South Sudan</option>
+	<option value="198">Spain</option>
+	<option value="199">SriLanka</option>
+	<option value="204">Sudan</option>
+	<option value="205">Suriname</option>
+	<option value="279">Svalbard and jan mayen</option>
+	<option value="206">Swaziland</option>
+	<option value="207">Sweden</option>
+	<option value="208">Switzerland</option>
+	<option value="209">Syria</option>
+	<option value="210">Taiwan</option>
+	<option value="211">Tajikistan</option>
+	<option value="212">Tanzania</option>
+	<option value="213">Thailand</option>
+	<option value="284">Timor-leste</option>
+	<option value="215">Togo</option>
+	<option value="283">Tokelau</option>
+	<option value="285">Tonga</option>
+	<option value="218">Trinidad and Tobago</option>
+	<option value="219">Tunisia</option>
+	<option value="220">Turkey</option>
+	<option value="221">Turkmenistan</option>
+	<option value="281">Turks and caicos islands</option>
+	<option value="286">Tuvalu</option>
+	<option value="229">U.S.Virgin Islands</option>
+	<option value="224">Uganda</option>
+	<option value="225">Ukraine</option>
+	<option value="226">United Arab Emirates</option>
+	<option value="227">United Kingdom</option>
+	<option value="228">United States</option>
+	<option value="230">Uruguay</option>
+	<option value="287">US minor outlying islands</option>
+	<option value="18">Uzbekistan</option>
+	<option value="291">Vanuatu</option>
+	<option value="55">Venezuela</option>
+	<option value="233">Vietnam</option>
+	<option value="290">Virgin islands, british</option>
+	<option value="292">Wallis and futuna</option>
+	<option value="253">Western sahara</option>
+	<option value="235">Western Samoa</option>
+	<option value="236">Yemen</option>
+	<option value="238">Zambia</option>
+	<option value="239">Zimbabwe</option>
+
+</select>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+
+																<div class="tick" id="tick-section-01"
+																	style="display: none;"></div>
+																<div class="spacer">
+																</div>
+															</div>
+														</div>
+
+
+														<div id="step-02">
+
+															<div id="section-02" class="content-section" style="">
+
+																<link href="../../scripts/select2.min.css"
+																	rel="stylesheet" />
+																<script src="../../scripts/select2.min.js"></script>
+																<script type="text/javascript">
+																	$(document).ready(function () {
+		$('.js-example-basic-single').select2();
+	});
+																</script>
+
+																<div class="col-md-12 col-sm-12 col-xs-12 edit_con">
+																	<button id="btnHiddenControlsChanger" class="edit" onclick="$('.hiddencontrols').show();return false;">Edit Details > </button>
+																</div>
+																<div class="table-section">
+
+																	<div class="col-md-12 col-xs-12">
+																		<div id="ctl00_ctl00_body_body_payControl_billingAddress_divBillingAddress"
+																			class="hiddencontrols col-12  tr-table">
+																			<div class="td-cell-text">
+																				Address 1:
+
+																			</div>
+																			<div class="td-cell">
+																				<input name="ctl00$ctl00$body$body$payControl$billingAddress$txtBillingAddress" maxlength="255" id="ctl00_ctl00_body_body_payControl_billingAddress_txtBillingAddress" type="text" class="field_385 req" placeholder="Street address, P.O. box, company name, c/o" onfocusout="fieldValidator()" />
+
+
+                </div>
+																			</div>
+																		</div>
+
+																		<div class="col-md-6 col-sm-6 col-xs-6">
+																			<div id="ctl00_ctl00_body_body_payControl_billingAddress_divBillingAddressCity"
+																				class="hiddencontrols col-12  tr-table">
+																				<div class="td-cell-text">
+																					City:
+
+																				</div>
+																				<div class="td-cell">
+																					<input name="ctl00$ctl00$body$body$payControl$billingAddress$txtBillingAddressCity" id="ctl00_ctl00_body_body_payControl_billingAddress_txtBillingAddressCity" type="text" class="field_385 minlen 2 req" onfocusout="fieldValidator()" />
+
+
+                </div>
+																				</div>
+																			</div>
+
+																			<div class="col-md-6 col-sm-6 col-xs-6">
+																				<div id="ctl00_ctl00_body_body_payControl_billingAddress_divBillingAddressZipCode"
+																					class="hiddencontrols col-12  tr-table">
+																					<div class="td-cell-text">
+																						Zip Code:
+
+																					</div>
+																					<div class="td-cell">
+																						<input name="ctl00$ctl00$body$body$payControl$billingAddress$txtBillingAddressZipCode" type="text" id="ctl00_ctl00_body_body_payControl_billingAddress_txtBillingAddressZipCode" class="field_385 minlen 3" inputmode="decimal" onfocusout="fieldValidator()" />
+
+
+                </div>
+																					</div>
+																				</div>
+																				<div id="ctl00_ctl00_body_body_payControl_billingAddress_divBillingAddressCountry"
+																					class="hiddencontrols col-12  tr-table"
+																					style="display:none">
+																					<div
+																						class="col-md-6 col-sm-6 col-xs-12 BillingAddressCountryCon">
+																						<div class="td-cell-text">
+																							Country:
+
+																						</div>
+																						<div class="td-cell">
+																							<div class="country-select">
+																								<select name="ctl00$ctl00$body$body$payControl$billingAddress$ddBillingAddressCountry" id="ctl00_ctl00_body_body_payControl_billingAddress_ddBillingAddressCountry" type="text" class="js-example-basic-single field_385">
+	<option value="" class="emptyOption"></option>
+	<option value="0"></option>
+	<option value="1">Afghanistan</option>
+	<option value="303">Aland Islands</option>
+	<option value="6">Albania</option>
+	<option value="7">Algeria</option>
+	<option value="8">American Samoa</option>
+	<option value="9">Andorra</option>
+	<option value="10">Angola</option>
+	<option value="240">Anguilla</option>
+	<option value="241">Antarctica</option>
+	<option value="12">Antigua</option>
+	<option value="13">Argentina</option>
+	<option value="14">Armenia</option>
+	<option value="242">Aruba</option>
+	<option value="17">Australia</option>
+	<option value="19">Austria</option>
+	<option value="20">Azerbaijan</option>
+	<option value="21">Bahamas</option>
+	<option value="22">Bahrain</option>
+	<option value="23">Bangladesh</option>
+	<option value="24">Barbados</option>
+	<option value="26">Belarus</option>
+	<option value="27">Belgium</option>
+	<option value="28">Belize</option>
+	<option value="29">Benin</option>
+	<option value="30">Bermuda</option>
+	<option value="243">Bhutan</option>
+	<option value="32">Bolivia</option>
+	<option value="33">Bosniaand Herzegovina</option>
+	<option value="34">Botswana</option>
+	<option value="244">Bouvet island</option>
+	<option value="35">Brazil</option>
+	<option value="301">British Indian Ocean Territory</option>
+	<option value="37">Brunei</option>
+	<option value="38">Bulgaria</option>
+	<option value="39">Burkina Faso</option>
+	<option value="40">Burundi</option>
+	<option value="41">Cambodia</option>
+	<option value="42">Cameroon</option>
+	<option value="43">Canada</option>
+	<option value="250">Cape verde</option>
+	<option value="45">Cayman Islands</option>
+	<option value="247">Central african republic</option>
+	<option value="47">Chad</option>
+	<option value="48">Chile</option>
+	<option value="49">China</option>
+	<option value="251">Christmas island</option>
+	<option value="245">Cocos (keeling) islands</option>
+	<option value="52">Colombia</option>
+	<option value="261">Comoros</option>
+	<option value="246">Congo, DRC</option>
+	<option value="54">Congo, ROC</option>
+	<option value="248">Cook islands</option>
+	<option value="57">Costa Rica</option>
+	<option value="58">Croatia</option>
+	<option value="59">Cuba</option>
+	<option value="307">Curacao</option>
+	<option value="60">Cyprus</option>
+	<option value="61">Czech Republic</option>
+	<option value="62">Denmark</option>
+	<option value="64">Djibouti</option>
+	<option value="252">Dominica</option>
+	<option value="66">Dominican Republic</option>
+	<option value="67">Ecuador</option>
+	<option value="68">Egypt</option>
+	<option value="69">El Salvador </option>
+	<option value="70">Equatorial Guinea</option>
+	<option value="71">Eritrea</option>
+	<option value="72">Estonia</option>
+	<option value="73">Ethiopia</option>
+	<option value="74">F.Y.R. of Macedonia</option>
+	<option value="254">Falkland islands (malvinas)</option>
+	<option value="255">Faroe islands</option>
+	<option value="77">Fiji Islands</option>
+	<option value="78">Finland</option>
+	<option value="79">France</option>
+	<option value="81">French Guiana</option>
+	<option value="82">French Polynesia</option>
+	<option value="302">French Southern and Antarctic Lands</option>
+	<option value="83">Gabon</option>
+	<option value="84">Gambia</option>
+	<option value="85">Georgia</option>
+	<option value="86">Germany</option>
+	<option value="87">Ghana</option>
+	<option value="88">Gibraltar</option>
+	<option value="89">Greece</option>
+	<option value="90">Greenland</option>
+	<option value="256">Grenada</option>
+	<option value="92">Guadeloupe</option>
+	<option value="93">Guam</option>
+	<option value="95">Guatemala</option>
+	<option value="298">Guernsey</option>
+	<option value="97">Guinea</option>
+	<option value="96">Guinea-Bissau</option>
+	<option value="98">Guyana</option>
+	<option value="99">Haiti</option>
+	<option value="300">Heard Island and McDonald Islands</option>
+	<option value="288">Holy see (vatican city state)</option>
+	<option value="100">Honduras</option>
+	<option value="101">Hong Kong SAR</option>
+	<option value="102">Hungary</option>
+	<option value="103">Iceland</option>
+	<option value="104">India</option>
+	<option value="105">Indonesia</option>
+	<option value="112">Iran</option>
+	<option value="113">Iraq</option>
+	<option value="114">Ireland</option>
+	<option value="296">Isle of Man</option>
+	<option value="115">Israel</option>
+	<option value="116">Italy</option>
+	<option value="117">Ivory Coast</option>
+	<option value="118">Jamaica</option>
+	<option value="119">Japan</option>
+	<option value="297">Jersey</option>
+	<option value="120">Jordan</option>
+	<option selected="selected" value="121">Kazakhstan</option>
+	<option value="122">Kenya</option>
+	<option value="260">Kiribati</option>
+	<option value="125">Korea</option>
+	<option value="124">Korea (North)</option>
+	<option value="234">Kuwait</option>
+	<option value="126">Kyrgyz Republic</option>
+	<option value="263">Lao, PDR</option>
+	<option value="128">Latvia</option>
+	<option value="129">Lebanon</option>
+	<option value="130">Lesotho</option>
+	<option value="131">Liberia</option>
+	<option value="132">Libya</option>
+	<option value="133">Liechtenstein</option>
+	<option value="134">Lithuania</option>
+	<option value="135">Luxembourg</option>
+	<option value="136">Macau</option>
+	<option value="137">Madagascar</option>
+	<option value="138">Malawi</option>
+	<option value="139">Malaysia</option>
+	<option value="140">Maldives</option>
+	<option value="141">Mali</option>
+	<option value="142">Malta</option>
+	<option value="265">Marshall islands</option>
+	<option value="144">Martinique</option>
+	<option value="145">Mauritania</option>
+	<option value="146">Mauritius</option>
+	<option value="293">Mayotte</option>
+	<option value="148">Mexico</option>
+	<option value="149">Micronesia</option>
+	<option value="150">Moldova</option>
+	<option value="151">Monaco</option>
+	<option value="152">Mongolia</option>
+	<option value="295">Montenegro</option>
+	<option value="267">Montserrat</option>
+	<option value="154">Morocco</option>
+	<option value="155">Mozambique</option>
+	<option value="156">Myanmar</option>
+	<option value="157">Namibia</option>
+	<option value="270">Nauru</option>
+	<option value="159">Nepal</option>
+	<option value="160">Netherlands</option>
+	<option value="161">Netherlands Antilles</option>
+	<option value="268">New caledonia</option>
+	<option value="164">New Zealand</option>
+	<option value="165">Nicaragua</option>
+	<option value="166">Niger</option>
+	<option value="167">Nigeria</option>
+	<option value="271">Niue</option>
+	<option value="269">Norfolk island</option>
+	<option value="266">Northern mariana islands</option>
+	<option value="170">Norway</option>
+	<option value="171">Oman</option>
+	<option value="172">Pakistan</option>
+	<option value="275">Palau</option>
+	<option value="274">Palestinian territory</option>
+	<option value="174">Panama</option>
+	<option value="175">Papua New Guinea</option>
+	<option value="176">Paraguay</option>
+	<option value="177">Peru</option>
+	<option value="178">Philippines</option>
+	<option value="273">Pitcairn</option>
+	<option value="179">Poland</option>
+	<option value="180">Portugal</option>
+	<option value="181">Puerto Rico</option>
+	<option value="182">Qatar</option>
+	<option value="276">Reunion</option>
+	<option value="184">Romania</option>
+	<option value="186">Russia</option>
+	<option value="187">Rwanda</option>
+	<option value="278">Saint helena</option>
+	<option value="262">Saint kitts and nevis</option>
+	<option value="264">Saint lucia</option>
+	<option value="272">Saint pierre and miquelon</option>
+	<option value="289">Saint vincent &amp; the grenadines</option>
+	<option value="304">Saint-Barth&#233;lemy</option>
+	<option value="305">Saint-Martin (French part)</option>
+	<option value="190">San Marino</option>
+	<option value="280">Sao tome and principe</option>
+	<option value="192">Saudi Arabia</option>
+	<option value="193">Senegal</option>
+	<option value="294">Serbia</option>
+	<option value="249">Serbia and montenegro</option>
+	<option value="194">Seychelle Islands</option>
+	<option value="195">Sierra Leone</option>
+	<option value="196">Singapore</option>
+	<option value="197">Slovak Republic</option>
+	<option value="5">Slovenia</option>
+	<option value="277">Solomon islands</option>
+	<option value="3">Somalia</option>
+	<option value="2">South Africa</option>
+	<option value="299">South Georgia and the South Sandwich Islands</option>
+	<option value="306">South Sudan</option>
+	<option value="198">Spain</option>
+	<option value="199">SriLanka</option>
+	<option value="204">Sudan</option>
+	<option value="205">Suriname</option>
+	<option value="279">Svalbard and jan mayen</option>
+	<option value="206">Swaziland</option>
+	<option value="207">Sweden</option>
+	<option value="208">Switzerland</option>
+	<option value="209">Syria</option>
+	<option value="210">Taiwan</option>
+	<option value="211">Tajikistan</option>
+	<option value="212">Tanzania</option>
+	<option value="213">Thailand</option>
+	<option value="284">Timor-leste</option>
+	<option value="215">Togo</option>
+	<option value="283">Tokelau</option>
+	<option value="285">Tonga</option>
+	<option value="218">Trinidad and Tobago</option>
+	<option value="219">Tunisia</option>
+	<option value="220">Turkey</option>
+	<option value="221">Turkmenistan</option>
+	<option value="281">Turks and caicos islands</option>
+	<option value="286">Tuvalu</option>
+	<option value="229">U.S.Virgin Islands</option>
+	<option value="224">Uganda</option>
+	<option value="225">Ukraine</option>
+	<option value="226">United Arab Emirates</option>
+	<option value="227">United Kingdom</option>
+	<option value="228">United States</option>
+	<option value="230">Uruguay</option>
+	<option value="287">US minor outlying islands</option>
+	<option value="18">Uzbekistan</option>
+	<option value="291">Vanuatu</option>
+	<option value="55">Venezuela</option>
+	<option value="233">Vietnam</option>
+	<option value="290">Virgin islands, british</option>
+	<option value="292">Wallis and futuna</option>
+	<option value="253">Western sahara</option>
+	<option value="235">Western Samoa</option>
+	<option value="236">Yemen</option>
+	<option value="238">Zambia</option>
+	<option value="239">Zimbabwe</option>
+
+</select>
+
+
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+
+
+																			<div class="tick" id="tick-section-02"
+																				style="display: none;"></div>
+																			<div class="spacer">
+																			</div>
+																		</div>
+																	</div>
+
+
+																	<div class="col-md-4 col-md-offset-8">
+																		<div class="wrap-button">
+
+																			<input type="button" name="ctl00$ctl00$body$body$payControl$btnNext" value="Continue" onclick="if(validateAllSections()) {__doPostBack(&#39;ctl00$ctl00$body$body$payControl&#39;,&#39;&#39;);} Page_BlockSubmit = false; ;__doPostBack(&#39;ctl00$ctl00$body$body$payControl$btnNext&#39;,&#39;&#39;)" id="ctl00_ctl00_body_body_payControl_btnNext" onmouseover="focusToValidate()" />
+
+            </div>
+																		</div>
+																	</div>
+
+
+																	<script src="../../Scripts/intlTelInput.js">
+																	</script>
+																	<script>
+																		var input = document.querySelector(".txtPhone");
+        window.intlTelInput(input, {
+            initialCountry: "auto",
+            geoIpLookup: function (callback) {
+                $.get('https://ipinfo.io', function () { }, "jsonp").always(function (resp) {
+                    var countryCode = (resp && resp.country) ? resp.country : "";
+                    callback(countryCode);
+                });
+            },
+            separateDialCode: true,
+            hiddenInput: "full_number",
+            autoPlaceholder: "aggressive",
+            preferredCountries: ['gb', 'fr', 'us'],
+            customPlaceholder: function (selectedCountryPlaceholder, selectedCountryData) {
+                return "e.g. " + selectedCountryPlaceholder;
+            },
+            utilsScript: "../../Scripts/utils.js",
+        });
+																	</script>
+																	<div class="MerchantBottomText">
+
+																	</div>
+
+																</div>
+															</div>
+														</div>
+													</div>
+
+												</div>
+												<div
+													class="col-md-6 col-md-offset-3 col-sm-12 col-xs-12 footer-menu-back-con">
+
+
+													<div class="footer-menu-back">
+														<div class="footer-menu-back-text">In case you wish to make
+															changes to your order, please click Back to return to the
+															merchant's site to adjust your order.
+
+
+
+														</div>
+													</div>
+
+													<div class="menu-back"></div>
+												</div>
+
+											</div>
+
+
+
+										</div>
+
+
+										<footer class="footer">
+											<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 footer_l1">
+												<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8  footer_logos">
+													<img class="footer-logo-img" src="../../footer-logos.png" alt="" />
+				</div>
+													<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4   footer_language">
+														<div id="ctl00_ctl00_wc2LanguageSelector"
+															class="details LanguageDropdown">
+															<div class="SelectedText">
+																<a><img border="0" title="US" src="/NPCommon/ImgCountry/18X12/US.gif"></a>
+															</div>
+															<div id="ctl00_ctl00_wc2LanguageSelector_Popup">
+																<ul>
+																	<li onclick="javascript:__doPostBack('ctl00$ctl00$wc2LanguageSelector','en-GB')"
+																		class="langSelector"
+																		style="text-align:left; direction:ltr;">
+																		<img border="0" title="English" src="/NPCommon/ImgCountry/18X12/GB.gif">&nbsp;English</li>
+																	<li onclick="javascript:__doPostBack('ctl00$ctl00$wc2LanguageSelector','fr-FR')"
+																		class="langSelector"
+																		style="text-align:left; direction:ltr;">
+																		<img border="0" title="français" src="/NPCommon/ImgCountry/18X12/FR.gif">&nbsp;français</li>
+																	<li onclick="javascript:__doPostBack('ctl00$ctl00$wc2LanguageSelector','es-ES')"
+																		class="langSelector"
+																		style="text-align:left; direction:ltr;">
+																		<img border="0" title="español" src="/NPCommon/ImgCountry/18X12/ES.gif">&nbsp;español</li>
+																	<li onclick="javascript:__doPostBack('ctl00$ctl00$wc2LanguageSelector','it-IT')"
+																		class="langSelector"
+																		style="text-align:left; direction:ltr;">
+																		<img border="0" title="italiano" src="/NPCommon/ImgCountry/18X12/IT.gif">&nbsp;italiano</li>
+																	<li onclick="javascript:__doPostBack('ctl00$ctl00$wc2LanguageSelector','lt-LT')"
+																		class="langSelector"
+																		style="text-align:left; direction:ltr;">
+																		<img border="0" title="lietuvių" src="/NPCommon/ImgCountry/18X12/LT.gif">&nbsp;lietuvių</li>
+																	<li onclick="javascript:__doPostBack('ctl00$ctl00$wc2LanguageSelector','ru-RU')"
+																		class="langSelector"
+																		style="text-align:left; direction:ltr;">
+																		<img border="0" title="русский" src="/NPCommon/ImgCountry/18X12/RU.gif">&nbsp;русский</li>
+																	<li onclick="javascript:__doPostBack('ctl00$ctl00$wc2LanguageSelector','de-DE')"
+																		class="langSelector"
+																		style="text-align:left; direction:ltr;">
+																		<img border="0" title="Deutsch" src="/NPCommon/ImgCountry/18X12/DE.gif">&nbsp;Deutsch</li>
+																	<li onclick="javascript:__doPostBack('ctl00$ctl00$wc2LanguageSelector','zh')"
+																		class="langSelector"
+																		style="text-align:left; direction:ltr;">
+																		<img border="0" title="中文" src="/NPCommon/ImgCountry/18X12/zh.gif">&nbsp;中文</li>
+																</ul>
+															</div>
+														</div>
+													</div>
+												</div>
+
+												<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 footer_l2">
+													<img class="footer-logo-client" src="/Data/logos/logo.png" alt="" />
+			</div>
+
+													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 footer_l3">
+														<div
+															class="col-lg-12 col-md-12 col-sm-12 col-xs-12 secure-logos">
+															<img class="footer-secure-logos" src="../../footer-secure-logos.svg" alt="" />
+				</div>
+															<div
+																class="col-lg-12 col-md-12 col-sm-12 col-xs-12 copyright">
+																RemitEx - Complete Online Payment Solutions
+															</div>
+														</div>
+
+										</footer>
+
+
+									</div>
+
+
+	</form>
+
+
+
+	<script defer="defer">
+		function goBack() {
+			window.history.back();
+		}
+	</script>
+
+	<script async type="text/javascript"
+		src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=1&cb=754939990"></script>
+</body>
+
+</html>

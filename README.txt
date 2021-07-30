@@ -1,6 +1,6 @@
 # UMLPractice
 
-//Initializing the repository here
+//Initializing the repository
 git remote remove UMLPractice
 git remote add UMLPractice https://github.com/milovdg/UMLPractice.git
 
