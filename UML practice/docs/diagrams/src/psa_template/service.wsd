@@ -1,0 +1,171 @@
+@startuml
+class com.fxclub.psa.example.service.system_response.parser.ExampleResponseParser {
+- MerchantRequisiteDomainEntity merchantRequisite
+- String transferId
+- TransferType transferType
++ boolean isValidResponseBySpecification()
++ TransferType getInternalTransferType()
++ String getInternalMerchantRequisite()
++ BigDecimal getPaymentSolutionAmount()
++ String getPaymentSolutionCurrency()
++ String getInternalTransferId()
++ String getPaymentSolutionTransferId()
++ String getPaymentSolutionTransactionId()
++ String getMethodInternalCode()
++ TransferStatus getInternalStatus()
++ String getProviderInternalCode()
++ String getResultDetailsCode()
++ String getResultDetailsMsg()
++ String getResultDetailsDirectory()
++ String getCorrRequisite()
++ String getCardHolder()
++ String getCardNumber()
++ List<Tokenizer> getTokenizers()
++ Integer getExpMonth()
++ Integer getExpYear()
++ String getPaymentSolutionSignature()
++ String getCalculatedSignature()
+}
+class com.fxclub.psa.example.service.transfer.integration_point.CreateIncomeTransferPoint {
+- RestTemplate restTemplate
+- PSAPaySolConfiguration paySolConfiguration
+- PSABaseConfiguration psaBaseConfiguration
+- {static} ExampleResponseChecker checker
++ Pair<ASystemResponse,RedirectionInfo> createIncomeTransfer(CreateIncomeTransferRequest,TransferDomainEntity,IMethodConfigurationPoint)
++ IResponseChecker getChecker()
++ boolean isSuitable(PaymentIntegrationCriteria)
+}
+class com.fxclub.psa.example.service.method.configuration.integration_point.CreditCardDPConfigurationPoint {
++ {static} String PAYMENT_INTEGRATION_CODE
++ {static} String PROVIDER_METHOD_CODE_CC
+- {static} List<String> PAYMENT_METHODS
+- {static} Map<String,String> PARAMETERS
+~ List<IMerchantRequisitePoint> merchantRequisitePoints
++ String getPaymentIntegrationCode()
++ String getMethodIconCode()
++ MethodWorkflowType getMethodWorkflow()
++ List<IMerchantRequisitePoint> getMerchantRequisites()
++ MethodOperationType getMethodOperationType()
++ List<String> getInternalPaymentMethods()
++ Map<String,String> getPaymentIntegrationProperties()
+}
+class com.fxclub.psa.example.service.notification.integration_point.WebhookForPushIntegrationPoint {
+- ObjectMapper mapper
+- ClientIpService clientIpService
+- PSAPaySolConfiguration paySolConfiguration
+- IntegrationPointCollector pointCollector
+- MerchantRequisiteExtractor merchantRequisiteExtractor
++ Pair<ASystemResponse,ResponseEntity> processWebhook(String,MultiValueMap,LinkedHashMap,String)
++ IResponseChecker getChecker()
++ boolean isSuitable(WebHookCriteria)
++ List<String> getInetMascAddressesAllowed()
++ String getIp()
+}
+class com.fxclub.psa.example.service.notification.integration_point.WebhookForTransferIntegrationPoint {
+- ObjectMapper mapper
+- ClientIpService clientIpService
+- PSAPaySolConfiguration paySolConfiguration
+- TransferFinder transferFinder
++ Pair<ASystemResponse,ResponseEntity> processWebhook(String,MultiValueMap,LinkedHashMap,String)
++ IResponseChecker getChecker()
++ boolean isSuitable(WebHookCriteria)
++ List<String> getInetMascAddressesAllowed()
++ String getIp()
+}
+class com.fxclub.psa.example.service.method.configuration.integration_point.NetellerDPConfigurationPoint {
++ {static} String PAYMENT_INTEGRATION_CODE
++ {static} String PROVIDER_METHOD_CODE_NETELLER
+- {static} List<String> PAYMENT_METHODS
+- {static} Map<String,String> PARAMETERS
+- List<OptionalFieldConf> optionalFields
+~ MerchantRequisitePointBVI merchantRequisitePointBVI
++ String getPaymentIntegrationCode()
++ String getMethodIconCode()
++ MethodWorkflowType getMethodWorkflow()
++ List<OptionalFieldConf> getMethodOptionalFields()
++ List<IMerchantRequisitePoint> getMerchantRequisites()
++ MethodOperationType getMethodOperationType()
++ List<String> getInternalPaymentMethods()
++ Map<String,String> getPaymentIntegrationProperties()
+~ void init()
+}
+class com.fxclub.psa.example.service.merchant_requisite.integration_point.MerchantRequisitePointSTORM {
+- {static} List<String> currencies
++ String getPaymentSolution()
++ String getMerchant()
++ List<String> getCurrenciesIso3()
++ boolean isSuitable(PaymentIntegrationCriteria)
+}
+class com.fxclub.psa.example.service.transfer.integration_point.MakeTransferIntegrationPoint {
+- RestTemplate restTemplate
+- PSAPaySolConfiguration paySolConfiguration
+- NetellerWDConfigurationPoint netellerWDConfigurationPoint
+- PSABaseConfiguration psaBaseConfiguration
+- {static} ExampleResponseChecker checker
++ ASystemResponse makeTransfer(TransferDomainEntity)
++ boolean isSuitable(MakeTransferCriteria)
++ IResponseChecker getChecker()
+}
+class com.fxclub.psa.example.service.method.configuration.integration_point.NetellerWDConfigurationPoint {
++ {static} String PAYMENT_INTEGRATION_CODE
++ {static} String PROVIDER_METHOD_CODE_NETELLER
+- {static} List<String> PAYMENT_METHODS
+- {static} Map<String,String> PARAMETERS
+~ MerchantRequisitePointBVI merchantRequisitePointBVI
++ String getPaymentIntegrationCode()
++ String getMethodIconCode()
++ MethodWorkflowType getMethodWorkflow()
++ List<IMerchantRequisitePoint> getMerchantRequisites()
++ MethodOperationType getMethodOperationType()
++ List<String> getInternalPaymentMethods()
++ Map<String,String> getPaymentIntegrationProperties()
+}
+class com.fxclub.psa.example.service.statement.integration_point.StatementIntegrationPoint {
+~ RestTemplate restTemplate
+~ PSAPaySolConfiguration paySolConfiguration
++ ASystemResponse requestStatement(TransferDomainEntity)
++ IResponseChecker getChecker()
++ boolean isSuitable(TransferDomainEntity)
+}
+class com.fxclub.psa.example.service.optional_field.integration_point.NetellerOptionalFieldPoint {
+~ AAASessionMessageSource messages
++ List<OptionalField> getOptionalFieldsValues(GetOptionalFieldValuesRequest,IMethodConfigurationPoint)
++ Map<String,String> checkOptionalFieldValues(CheckOptionalFieldValuesRequest,IMethodConfigurationPoint)
++ boolean isSuitable(PaymentIntegrationCriteria)
+}
+class com.fxclub.psa.example.service.system_response.checker.ExampleResponseChecker {
+- {static} List<String> INCORRECT_REQUISITES_ERRORS
+- {static} List<String> INCORRECT_PARAMS
+- {static} List<String> DECLINED_PAYMENT_ERRORS
+- {static} List<String> NOT_ENOUGH_FUNDS_ERRORS
+- {static} List<String> DUPLICATE_OPERATION_ERRORS
++ boolean isIncorrectParametersPSAException(ASystemResponse)
++ boolean isInvalidRequisitePSAException(ASystemResponse)
++ boolean isNotEnoughFundsPSAException(ASystemResponse)
++ boolean isDuplicateOperationPSAException(ASystemResponse)
++ boolean isPaymentDeclinedPSAException(ASystemResponse)
+}
+class com.fxclub.psa.example.service.merchant_requisite.integration_point.MerchantRequisitePointBVI {
+- {static} List<String> currencies
++ String getPaymentSolution()
++ String getMerchant()
++ List<String> getCurrenciesIso3()
++ boolean isSuitable(PaymentIntegrationCriteria)
+}
+
+
+com.fxclub.psa.core.service.system_response.parser.ISystemResponseSigned <|.. com.fxclub.psa.example.service.system_response.parser.ExampleResponseParser
+com.fxclub.psa.core.service.system_response.parser.ASystemResponse <|-- com.fxclub.psa.example.service.system_response.parser.ExampleResponseParser
+com.fxclub.psa.core.service.transfer.integration_point.ACreateIncomeTransferPoint <|-- com.fxclub.psa.example.service.transfer.integration_point.CreateIncomeTransferPoint
+com.fxclub.psa.core.service.method.configuration.integration_point.AMethodConfigurationPoint <|-- com.fxclub.psa.example.service.method.configuration.integration_point.CreditCardDPConfigurationPoint
+com.fxclub.psa.core.service.notification.integration_point.AWebhookIntegrationPoint <|-- com.fxclub.psa.example.service.notification.integration_point.WebhookForPushIntegrationPoint
+com.fxclub.psa.core.service.notification.integration_point.AWebhookIntegrationPoint <|-- com.fxclub.psa.example.service.notification.integration_point.WebhookForTransferIntegrationPoint
+com.fxclub.psa.core.service.method.configuration.integration_point.AMethodConfigurationPoint <|-- com.fxclub.psa.example.service.method.configuration.integration_point.NetellerDPConfigurationPoint
+com.fxclub.psa.core.service.merchant_requisite.integration_point.AMerchantRequisitePoint <|-- com.fxclub.psa.example.service.merchant_requisite.integration_point.MerchantRequisitePointSTORM
+com.fxclub.psa.core.service.transfer.integration_point.AMakeTransferPoint <|-- com.fxclub.psa.example.service.transfer.integration_point.MakeTransferIntegrationPoint
+com.fxclub.psa.core.service.method.configuration.integration_point.AMethodConfigurationPoint <|-- com.fxclub.psa.example.service.method.configuration.integration_point.NetellerWDConfigurationPoint
+com.fxclub.psa.core.service.statement.integration_point.AStatementIntegrationPoint <|-- com.fxclub.psa.example.service.statement.integration_point.StatementIntegrationPoint
+com.fxclub.psa.core.service.optional_field.integration_point.AOptionalFieldPoint <|-- com.fxclub.psa.example.service.optional_field.integration_point.NetellerOptionalFieldPoint
+com.fxclub.psa.core.service.system_response.checker.AResponseChecker <|-- com.fxclub.psa.example.service.system_response.checker.ExampleResponseChecker
+com.fxclub.psa.core.service.merchant_requisite.integration_point.AMerchantRequisitePoint <|-- com.fxclub.psa.example.service.merchant_requisite.integration_point.MerchantRequisitePointBVI
+@enduml
