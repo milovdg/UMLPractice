@@ -1,23 +1,23 @@
 @startuml
-Shapes <|-- Circle
+Shape <|-- Circle
+Shape : +getSquare()
 
 Circle : -radius
 
-Shapes : -name
-Shapes : -color
-Shapes : +getColor()
-Shapes : +getSquare()
+Shape : -name
+Shape : -color
+Shape : +getColor()
 
-Shapes <|-- Rectangle
+Shape <|-- Rectangle
 Rectangle : -length
 Rectangle : -width
 
-Shapes <|-- Triangle
+Shape <|-- Triangle
 Triangle : -side_a
 Triangle : -side_b
 Triangle : -side_c
 
-Shapes <|-- Ellipse
+Shape <|-- Ellipse
 Ellipse : -semi_minor_axis
 Ellipse : -semi_major_axis
 
