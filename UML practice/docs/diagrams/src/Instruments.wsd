@@ -1,0 +1,20 @@
+@startuml
+
+interface Instrument
+class Guitar
+class Drum
+class Trumpet 
+
+Instrument : play()
+Instrument : String KEY ="C major"
+
+Instrument <|-- Guitar
+Guitar : Strings number
+
+Instrument <|-- Drum
+Drum : Size
+
+Instrument <|-- Trumpet
+Trumpet : Diameter
+
+@enduml
