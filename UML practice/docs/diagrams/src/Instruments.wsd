@@ -1,4 +1,5 @@
 @startuml
+title Interfaces
 
 interface Instrument
 class Guitar
