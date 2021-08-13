@@ -1,0 +1,42 @@
+@startuml
+
+title Instant PayCore withddrawal flow
+
+actor user
+participant Brocker
+actor treasure
+participant FxBank
+participant PaymentHub
+participant psa_paycore
+participant Tokenex
+participant PayCore
+
+
+user -> Brocker ++: 1. Fill the withdrawal request out, and commit it
+Tokenex --> Brocker --: 
+
+Brocker -> FxBank ++: 2.1 Create request for withdrawal
+treasure -> FxBank ++: 2.2 Check and accept the request for withdrawal
+
+note right of FxBank #Aqua: Trough the Kafka
+FxBank -> PaymentHub ++: 2.3 Send the event to initiate the payout processing
+
+PaymentHub -> psa_paycore ++: 2.4 Sent makeTransfer to execute
+
+psa_paycore -> Tokenex ++: 3. Initiate the payout processing by card TOKEN
+
+note right of Tokenex #Aqua: Proxying the card payouts
+Tokenex -> PayCore ++: 4. Request payout invoice creating, and processing by card NUMBER
+note left of PayCore #Aqua: Might be redirect to 3ds page
+note left of PayCore #FFAAAA: Two interfaces used: \nAPI1 CREATE PAYOUT INVOICE; \nAPI2 PROCESS PAYOUT INVOICE
+PayCore --> Tokenex --: Success/Fail
+
+Tokenex --> psa_paycore --: Success/Fail
+
+psa_paycore --> PaymentHub --: Success/Fail 
+
+note right of FxBank #Aqua: Trough the Kafka
+PaymentHub --> FxBank --: Success/Fail
+PaymentHub --> Brocker --: Success/Fail
+
+@enduml
