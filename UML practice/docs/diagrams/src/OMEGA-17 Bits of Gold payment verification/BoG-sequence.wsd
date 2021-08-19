@@ -5,40 +5,76 @@ title Crypto currency Mercuryo deposits processing flow
 actor user
 participant SG_UPP
 participant Payment_hub
-participant Kafka
+participant FxPay
 participant FxBank
+participant PSA
+participant Kafka
 participant Crypto_adapter
 participant Mercuryo
 participant BlockChain
 
-user -> SG_UPP ++: 1. Fill the deposit form out
-SG_UPP -> Kafka ++: Message to get profile info
-Kafka -> FxBank ++: Get profile info, \nincluding personal (wallet) crypto address
-Kafka <-- FxBank --: Receiving profile info
-Payment_hub <-- Kafka --: Personal (wallet) crypto address: Yes/No
+user -> SG_UPP ++: 1. Choose the Mercuryo method \n put an ammount and submit
+SG_UPP -> Payment_hub ++: requestDeposit
+deactivate SG_UPP
+Payment_hub -> Payment_hub ++: Calculate the solution (PSA) based on \ngetPaymentMethodsConfiguration response
+Payment_hub -> PSA ++: createIncomeTransfer
+deactivate Payment_hub
+deactivate Payment_hub
+note right of FxPay #FFAAAA: Suborg requesite storage
+PSA -> FxPay ++: Get wallet crypto address in regards to the \nmerchant requesites, method and cyrrency
+deactivate PSA
+FxPay -> FxPay ++: Loocking for the address in the storage
+
 alt Wallet crypto address does NOT exist
-Payment_hub -> Kafka ++: Creating personal (wallet) crypto \naddress message
-note left of Crypto_adapter #Aqua : Crypto adapter INTERFACE1: \nGENERATE ADDRESS
-Kafka -> Crypto_adapter ++: btc.generateAddress
-Kafka <-- Crypto_adapter --: Personal (wallet) crypto address
-Kafka --> SG_UPP --: Get that back
-
-else Wallet crypto address exists
-user -> SG_UPP ++: 2. Submitting depostt request
-SG_UPP -> Payment_hub ++: Deposit submit
-Payment_hub --> Mercuryo ++: Open deposit page
-Mercuryo -> Mercuryo ++: Converts fiats to crypto
-user -> Mercuryo --: 3. Submit crypto currency order
-Mercuryo -> BlockChain ++: Put transaction into the blockchain
-Crypto_adapter -> BlockChain ++: 4. Notifications \nfishing
-note left of Crypto_adapter #Aqua : Crypto adapter INTERFACE2: \nPROCESS DEPOSIT NOTIFICATIONS
-Crypto_adapter <-- BlockChain --: Receiving notifications
-Crypto_adapter --> Kafka --: Message with notification
-Kafka --> Payment_hub --: Notification received
-Payment_hub -> Kafka ++: Transfer crypto to the user's \nWallet crypto address
-Kafka -> FxBank --: Update ballance and transactions info
-
+    note left of Crypto_adapter #Aqua : Crypto adapter INTERFACE1: \nGENERATE ADDRESS
+    FxPay -> Crypto_adapter ++: Call btc.generateAddress
+    FxPay <-- Crypto_adapter --: Wallet crypto address
+    FxPay -> FxPay ++: Save wallet crypto address in DB
+    
+    deactivate FxPay
+    deactivate FxPay
 end
+FxPay --> PSA
+deactivate FxPay
+
+activate PSA
+PSA -> PSA ++: Get the PS link from the PS settings (BO), \nor generate dynamicly  
+
+PSA --> Payment_hub --: Redirect link
+activate Payment_hub
+deactivate PSA
+Payment_hub --> SG_UPP --: Redirect link
+
+activate SG_UPP
+user <- SG_UPP ++: Get user redirected to PS 
+deactivate SG_UPP
+
+user -> Mercuryo --: 2. Submit crypto currency order
+activate Mercuryo
+Mercuryo -> BlockChain ++: Put transaction into the blockchain
+deactivate Mercuryo
+deactivate BlockChain
+Crypto_adapter -> BlockChain ++: 3. Notifications \nfishing
+note left of Crypto_adapter #Aqua : Crypto adapter INTERFACE2: \nPROCESS DEPOSIT NOTIFICATIONS
+
+Crypto_adapter <-- BlockChain --: Receiving notifications
+activate Crypto_adapter
+deactivate BlockChain
+Crypto_adapter --> Kafka --: Message with notification
+activate Kafka
+Kafka --> Payment_hub --: Notification received
+activate Payment_hub
+Payment_hub -> Kafka ++: Transfer crypto to the user's \nWallet crypto address
+deactivate Payment_hub
+
+Kafka --> FxPay --: Deliver the event
+activate FxPay
+FxPay --> Payment_hub  --: Deliver the event
+activate Payment_hub
+Payment_hub -> FxBank ++: Create incomeTransfer
+deactivate Payment_hub
+FxBank -> FxBank ++: Enrollment
+
 
 
 @enduml
