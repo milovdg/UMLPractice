@@ -54,8 +54,8 @@ activate Mercuryo
 Mercuryo -> BlockChain ++: Put transaction into the blockchain
 deactivate Mercuryo
 deactivate BlockChain
-Crypto_adapter -> BlockChain ++: 3. Notifications \nfishing
 note left of Crypto_adapter #Aqua : Crypto adapter INTERFACE2: \nPROCESS DEPOSIT NOTIFICATIONS
+Crypto_adapter -> BlockChain ++: 3. Notifications \nfishing
 
 Crypto_adapter <-- BlockChain --: Receiving notifications
 activate Crypto_adapter
