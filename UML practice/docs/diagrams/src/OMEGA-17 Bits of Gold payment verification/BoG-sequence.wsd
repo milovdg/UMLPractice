@@ -75,6 +75,4 @@ Payment_hub -> FxBank ++: Create incomeTransfer
 deactivate Payment_hub
 FxBank -> FxBank ++: Enrollment
 
-
-
 @enduml
