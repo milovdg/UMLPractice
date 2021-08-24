@@ -1,0 +1,75 @@
+@startuml
+
+title Simplex payouts in STORM using link zero integration flow 
+
+actor user
+participant SG_UPP
+participant Payment_hub
+participant FxPay
+participant FxBank
+participant PSA
+participant Kafka
+participant Crypto_adapter
+participant Simplex
+participant BlockChain
+
+user -> SG_UPP ++: 1. Chooses the certain bank transfer method, \nand submit the withdrawal request
+
+SG_UPP -> Simplex ++: Redirecting to the \n“Sell-Crypto” widget link
+deactivate SG_UPP
+
+Simplex -> Simplex ++: Make the selling order, \nand get the Simplex'swallet crypto address 
+deactivate Simplex
+
+user <-- Simplex ++: 2. Copy-paste the Simplex'swallet crypto address
+deactivate Simplex
+deactivate Simplex
+
+user -> SG_UPP ++: 3. Chooses the Bitcoin method \n put an ammount and Simplex'swallet crypto address \nand submit
+deactivate user
+
+SG_UPP -> Payment_hub ++: requestWithdrawal
+deactivate SG_UPP
+Payment_hub -> Payment_hub ++: Calculate the solution (PSA) based on \ngetPaymentMethodsConfiguration response
+Payment_hub -> PSA ++: createOutcomeTransfer
+deactivate Payment_hub
+deactivate Payment_hub
+
+note left of Crypto_adapter #Aqua : Crypto adapter INTERFACE1: \nPROCESS WITHDRAWAL \nREQUEST
+PSA -> Crypto_adapter ++: makeOutcomeTransfer
+deactivate PSA
+
+Crypto_adapter -> BlockChain ++: Put transaction into the blockchain
+deactivate Crypto_adapter
+
+BlockChain --> Simplex --: OK
+activate Simplex
+deactivate BlockChain
+Simplex -> Simplex ++: Process the bank wire transfer
+deactivate Simplex
+deactivate Crypto_adapter
+
+deactivate Simplex
+deactivate BlockChain
+
+Crypto_adapter -> BlockChain ++: 4. Notifications \nfishing
+
+Crypto_adapter <-- BlockChain --: Receiving notifications
+activate Crypto_adapter
+deactivate BlockChain
+Crypto_adapter --> Kafka --: Message with notification
+activate Kafka
+Kafka --> Payment_hub --: Notification received
+activate Payment_hub
+Payment_hub -> Kafka ++: Transfer crypto to the user's \nWallet crypto address
+deactivate Payment_hub
+
+Kafka --> FxPay --: Deliver the event
+activate FxPay
+FxPay --> Payment_hub  --: Deliver the event
+activate Payment_hub
+Payment_hub -> FxBank ++: Transaction status
+deactivate Payment_hub
+FxBank -> FxBank ++: Update the transaction status
+
+@enduml
