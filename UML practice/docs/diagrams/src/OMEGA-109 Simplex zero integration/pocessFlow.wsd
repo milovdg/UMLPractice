@@ -16,6 +16,7 @@ participant BlockChain
 user -> SG_UPP ++: 1. Chooses the certain bank transfer method, \nand submit the withdrawal request
 
 SG_UPP -> Simplex ++: Redirecting to the \n“Sell-Crypto” widget link
+deactivate PSA
 deactivate SG_UPP
 
 Simplex -> Simplex ++: Make the selling order, \nand get the Simplex'swallet crypto address 
@@ -31,12 +32,16 @@ deactivate user
 SG_UPP -> Payment_hub ++: requestWithdrawal
 deactivate SG_UPP
 Payment_hub -> Payment_hub ++: Calculate the solution (PSA) based on \ngetPaymentMethodsConfiguration response
-Payment_hub -> PSA ++: createOutcomeTransfer
+Payment_hub -> FxBank ++: createWithdrawal
+FxBank -> FxBank ++: Creating withdrawal request
+deactivate FxBank
+FxBank --> Payment_hub --: OK
+Payment_hub -> Kafka ++: makeTransfer event
 deactivate Payment_hub
 deactivate Payment_hub
 
-note left of Crypto_adapter #Aqua : Crypto adapter INTERFACE1: \nPROCESS WITHDRAWAL \nREQUEST
-PSA -> Crypto_adapter ++: makeOutcomeTransfer
+Kafka -> PSA ++: makeTransfer
+deactivate Kafka
 deactivate PSA
 
 Crypto_adapter -> BlockChain ++: Put transaction into the blockchain
@@ -59,17 +64,15 @@ activate Crypto_adapter
 deactivate BlockChain
 Crypto_adapter --> Kafka --: Message with notification
 activate Kafka
-Kafka --> Payment_hub --: Notification received
-activate Payment_hub
-Payment_hub -> Kafka ++: Transfer crypto to the user's \nWallet crypto address
-deactivate Payment_hub
 
-Kafka --> FxPay --: Deliver the event
-activate FxPay
-FxPay --> Payment_hub  --: Deliver the event
-activate Payment_hub
-Payment_hub -> FxBank ++: Transaction status
-deactivate Payment_hub
+Kafka --> PSA --: Notification received
+activate PSA
+PSA -> Kafka ++: Transfer status
+deactivate PSA
+
+Kafka --> FxBank --: Deliver the event
+activate FxBank
 FxBank -> FxBank ++: Update the transaction status
+deactivate FxBank
 
 @enduml
