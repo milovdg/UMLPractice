@@ -1,0 +1,26 @@
+@startuml withdrawal-common.jpg
+scale max 8192 height
+autonumber
+legend top left
+  Common withdrawal sequence diagram except:
+  - Antifraud details
+  - Create requisites for bank, cup
+  - Approve CUP requisites by manager
+  - Export of bank payments
+end legend
+
+actor Client
+actor Manager
+participant APP
+participant PaymentHub
+participant FxPay
+participant AB
+participant FxBank
+participant UPP
+participant AAA
+participant PS as "EPG \n+other provider"
+participant clientService
+participant clientProfileService
+participant transliterateService as "transliterate"
+participant dealing
+participant Kafka
