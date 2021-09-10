@@ -8,6 +8,7 @@ actor user
 participant StormGain
 participant Simplex
 participant Bank
+participant BlockChain
 
 user -> StormGain ++: Submit deposit
 
@@ -26,13 +27,18 @@ deactivate Simplex
 Simplex --> user ++: Show bank requesites to user
 deactivate Simplex
 
-user -> StormGain ++: Copy-paste bank requesites to user
+user -> user ++: Copy-paste bank requesites to user
 
-StormGain -> Bank ++: Submit payment
+user -> Bank ++: Submit payment
+deactivate user
+deactivate user
 
+Bank -> Bank ++: Process payment
+deactivate Bank
 Bank --> Simplex ++: Payment confirmation
+deactivate Bank
 
-Simplex -> StormGain ++: Transfer crypto to the user's wallet
+Simplex -> BlockChain ++: Transfer crypto to the user's wallet
 
 
 @enduml
