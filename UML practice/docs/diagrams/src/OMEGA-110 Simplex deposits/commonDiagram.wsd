@@ -7,7 +7,6 @@ autonumber
 actor user
 participant StormGain
 participant Simplex
-participant Bank
 participant BlockChain
 
 user -> StormGain ++: Submit deposit
@@ -23,20 +22,17 @@ deactivate Simplex
 
 Simplex -> Simplex ++: Make payment request
 deactivate Simplex
-
-Simplex --> user ++: Show bank requesites to user
 deactivate Simplex
 
-user -> user ++: Copy-paste bank requesites to user
-
-user -> Bank ++: Submit payment
+user -> Simplex ++: Submit payment
 deactivate user
 deactivate user
 
-Bank -> Bank ++: Process payment
-deactivate Bank
-Bank --> Simplex ++: Payment confirmation
-deactivate Bank
+Simplex -> Simplex ++: Process payment
+deactivate Simplex
+
+Simplex --> Simplex ++: Payment confirmation
+deactivate Simplex
 
 Simplex -> BlockChain ++: Transfer crypto to the user's wallet
 
