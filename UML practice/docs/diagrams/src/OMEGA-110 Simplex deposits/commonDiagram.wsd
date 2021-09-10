@@ -1,0 +1,38 @@
+@startuml
+
+title Common Simplex bank wire deposits flow
+
+autonumber
+
+actor user
+participant StormGain
+participant Simplex
+participant Bank
+
+user -> StormGain ++: Submit deposit
+
+StormGain -> Simplex ++: Redirect to Simplex
+deactivate StormGain
+
+Simplex -> Simplex ++: Adjust currencies, and ammmount, \nput crypto wallet address
+deactivate Simplex
+
+Simplex -> Simplex ++: Checking user
+deactivate Simplex
+
+Simplex -> Simplex ++: Make payment request
+deactivate Simplex
+
+Simplex --> user ++: Show bank requesites to user
+deactivate Simplex
+
+user -> StormGain ++: Copy-paste bank requesites to user
+
+StormGain -> Bank ++: Submit payment
+
+Bank --> Simplex ++: Payment confirmation
+
+Simplex -> StormGain ++: Transfer crypto to the user's wallet
+
+
+@enduml
