@@ -38,4 +38,5 @@ note left of "Server side SG/Libertex" #Aqua: I3: GET NOTIFICATION
 "Server side SG/Libertex" -> "Libertex notification endpoint" ++: Hearing a transaction status
 "Libertex notification endpoint" --> "Server side SG/Libertex" --: reply_code
 
+
 @enduml
