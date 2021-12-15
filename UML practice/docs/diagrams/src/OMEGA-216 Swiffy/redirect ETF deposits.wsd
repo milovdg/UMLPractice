@@ -1,0 +1,38 @@
+@startuml Swiffy
+
+autonumber
+
+actor Client
+participant Libertex
+participant Swiffy
+participant Bank
+
+Client ->> Libertex  ++: Submit deposit with Swiffy method 
+activate Libertex
+
+Libertex ->> Libertex ++: Transfer (:income) created
+deactivate Libertex
+
+Libertex ->> Swiffy ++: POST: /Get payment key
+
+Swiffy -->> Libertex --: /Get payment key request response (JSON)
+deactivate Libertex
+deactivate Libertex
+
+
+Libertex ->> Swiffy ++: Go to th eredirect page
+
+
+Swiffy ->> Swiffy ++: Authorize a user with th ebank account
+deactivate Swiffy
+
+Swiffy -> Bank ++: Get the deposit transfer accepted
+Bank --> Swiffy --: Transfer completed
+
+Swiffy --> Libertex --: Final Transaction Result (webhook)
+
+Libertex ->> Libertex --: Update Transfer (:income)
+
+
+@enduml
+
