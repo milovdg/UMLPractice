@@ -1,0 +1,40 @@
+
+@startuml Swiffy
+
+autonumber
+
+actor Client
+actor Manager
+participant Libertex
+participant Swiffy
+participant Bank
+
+Client -> Libertex ++: Initiate withdrawal request
+Libertex -> Libertex : Convert amount BTC -> ZAR
+Manager -> Libertex : Accept withdrawal request
+Libertex --> Libertex --: Accepted
+
+Libertex -> Libertex ++: Create transfer (:outcome)
+deactivate Libertex
+
+alt
+Libertex -> Swiffy ++: Validate account (POST)
+Swiffy --> Libertex --: Result
+end
+
+Libertex -> Swiffy ++: Queue withdrawal (POST)
+Swiffy --> Libertex : OK
+
+Swiffy -> Bank ++: Push bank transfers
+Bank -> Bank : Make bank transfer
+Bank --> Swiffy --: Status
+deactivate Swiffy
+
+Libertex -> Swiffy ++: Get transaction info (GET)
+Swiffy --> Libertex --: Status
+
+Swiffy --> Libertex : Status (webhook)
+
+Libertex -> Libertex : Update transfer (:outcome)
+
+@enduml
