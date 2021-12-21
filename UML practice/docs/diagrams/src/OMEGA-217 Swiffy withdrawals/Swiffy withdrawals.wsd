@@ -11,16 +11,18 @@ participant Bank
 
 Client -> Libertex ++: Initiate withdrawal request
 Libertex -> Libertex : Convert amount BTC -> ZAR
+
+alt
+Libertex -> Swiffy ++: Validate account (POST)
+Swiffy --> Libertex --: Result
+end
+
 Manager -> Libertex : Accept withdrawal request
 Libertex --> Libertex --: Accepted
 
 Libertex -> Libertex ++: Create transfer (:outcome)
 deactivate Libertex
 
-alt
-Libertex -> Swiffy ++: Validate account (POST)
-Swiffy --> Libertex --: Result
-end
 
 Libertex -> Swiffy ++: Queue withdrawal (POST)
 Swiffy --> Libertex : OK

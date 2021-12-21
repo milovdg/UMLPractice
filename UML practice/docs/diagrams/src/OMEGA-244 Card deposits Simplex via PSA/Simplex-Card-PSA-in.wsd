@@ -1,0 +1,79 @@
+@startuml
+autonumber
+
+actor Client
+participant PaymentPage
+participant Backend
+participant PSA
+participant Simplex
+participant Blockchain
+
+
+Client -> PaymentPage: User select Simplex method
+activate PaymentPage
+
+PaymentPage -> PSA: GET quote
+activate PSA
+
+PSA -> Simplex: /quote
+activate Simplex
+
+Simplex --> PSA: rate
+deactivate Simplex
+
+PSA --> PaymentPage: rate
+deactivate PSA
+
+PaymentPage --> Client: exchange currency rate
+deactivate Client
+
+
+Client -> PaymentPage: press deposit
+activate PaymentPage
+
+PaymentPage -> Backend --: Request for deposit
+activate Backend
+
+Backend -> PSA: /createIncomeTransfer
+activate PSA
+
+PSA -> Simplex: /partner/data
+activate Simplex
+
+Simplex -> Simplex : Confirm payment with \nSimplex bank department
+
+Simplex --> PSA: "is_kyc_update_required"
+deactivate Simplex
+
+Simplex -> Blockchain ++: Push crypto payment
+Blockchain --> Simplex --: Get notification
+
+PSA --> Backend: transfer in status "inProgress"
+deactivate Backend
+
+loop
+
+PSA -> Simplex: /events
+activate Simplex
+
+Simplex --> PSA: [events array]
+deactivate Simplex
+
+activate PSA
+PSA -> PSA --: check event by payment_id
+
+end
+
+PSA -> Backend: payment successful
+
+PSA -> Simplex: delete events/{id}
+activate Simplex
+
+Simplex -> Simplex: delete event by id
+
+Simplex --> PSA: status ok
+deactivate Simplex
+
+
+
+@enduml
