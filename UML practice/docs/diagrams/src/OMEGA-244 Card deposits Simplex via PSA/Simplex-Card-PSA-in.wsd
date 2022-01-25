@@ -24,7 +24,7 @@ deactivate Simplex
 PSA --> PaymentPage: rate
 deactivate PSA
 
-PaymentPage --> Client: exchange currency rate
+PaymentPage --> Client --: exchange currency rate
 deactivate Client
 
 
@@ -42,14 +42,22 @@ activate Simplex
 
 Simplex -> Simplex : Confirm payment with \nSimplex bank department
 
-Simplex --> PSA: "is_kyc_update_required"
+Simplex --> PSA --: "is_kyc_update_required"
 deactivate Simplex
+deactivate PSA
+
+PSA --> Backend: transfer in status "inProgress"
+deactivate Backend
+
+PSA -> Simplex ++: POST /payments/new
+Simplex --> Client --: Get a user redirected to \na checkout page
+
+Client -> Simplex ++: Confirm payment
+Simplex --> PaymentPage --: OK
 
 Simplex -> Blockchain ++: Push crypto payment
 Blockchain --> Simplex --: Get notification
 
-PSA --> Backend: transfer in status "inProgress"
-deactivate Backend
 
 loop
 
