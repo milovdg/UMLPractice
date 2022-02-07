@@ -1,0 +1,17 @@
+@startuml first-use
+
+actor Администратор
+actor Потребитель
+
+(Ппрверка доступных ресурсов) as (check_resources)
+(Включение события) as (add_event)
+(Публикация) as (publishing)
+
+Потребитель -> Администратор
+note right of Потребитель #Aqua : Заявка: \n- событие\n- дата\n- комната
+
+Администратор --> check_resources
+Администратор --> add_event
+Администратор --> publishing
+
+@enduml

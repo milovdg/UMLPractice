@@ -9,36 +9,20 @@ participant Simplex
 participant Blockchain
 
 
-Client -> PaymentPage: User select Simplex method
-activate PaymentPage
-
-PaymentPage -> PSA: GET quote
-activate PSA
-
-PSA -> Simplex: /quote
-activate Simplex
-
-Simplex --> PSA: rate
-deactivate Simplex
-
-PSA --> PaymentPage: rate
-deactivate PSA
-
-PaymentPage --> Client --: exchange currency rate
-deactivate Client
-
-
-Client -> PaymentPage: press deposit
+Client -> PaymentPage: User selects payment method, \npresses deposit
 activate PaymentPage
 
 PaymentPage -> Backend --: Request for deposit
 activate Backend
 
-Backend -> PSA: /createIncomeTransfer
-activate PSA
+Backend -> PSA ++: /createIncomeTransfer
 
-PSA -> Simplex: /partner/data
-activate Simplex
+PSA -> Simplex ++: /quote
+Simplex --> PSA --: rate
+deactivate PSA
+
+PSA -> Simplex ++: /partner/data
+activate PSA
 
 Simplex -> Simplex : Confirm payment with \nSimplex bank department
 
