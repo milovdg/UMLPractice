@@ -1,0 +1,70 @@
+@startuml
+autonumber
+
+actor Client
+
+== CLient flow ==
+activate Client
+Client -> UPP ++: Select Pay4Fun method\nfill amount \npress press deposit
+UPP -> PHUB ++: requestDeposit\nmethod = pay_pay4fun_in
+PHUB -> PSA ++: /createIncomeTransfer\npaymentIntegrationCode = pay_pay4fun_in
+PSA -> PSA: save transfer
+PSA --> Kafka: psa-?--all: send transfer event
+PSA -> Pay4Fun ++: <b><font color=green>POST: /wallet/process/
+Pay4Fun --> PSA --: <b><font color=green>/wallet/process/ response \n(redirect URL)
+PSA --> PHUB --: RedirectInfo, redirect url, transferId
+PHUB --> UPP --: RedirectInfo, redirect url, transferId
+UPP -> Client --: redirect url (pay4fun)
+
+Client -> Pay4Fun ++: load deposit page
+Pay4Fun --> Client --: deposit page
+
+Client -> Pay4Fun ++: complete payment
+Pay4Fun --> Client --: redirect url (result page)
+
+Client -> UPP ++: load result page
+UPP -> PHUB ++: updateIncomeTransfer\nwith transferId
+PHUB -> PSA ++: updateIncomeTransfer\nwith transferId
+PSA -> PSA: get transfer from DB
+opt status not final
+    PSA -> Pay4Fun ++: <b><font color=green>GET: Get payment status /wallet/transaction/
+    Pay4Fun --> PSA --: <b><font color=green>status
+    PSA -> PSA: update transfer
+    PSA --> Kafka: psa-?--all: send transfer event
+end opt
+PSA -> PHUB --: Ok, transfer status
+PHUB -> UPP --: Ok, transfer status
+UPP -> Client --: result page
+deactivate Client
+
+== Statements ==
+    activate PSA
+    loop loop by async operation configuration
+    PSA -> Pay4Fun ++: <b><font color=green>GET: Get payment status /wallet/transaction/
+    Pay4Fun --> PSA --: <b><font color=green>status
+    PSA -> PSA: update transfer
+    PSA --> Kafka: transfer event
+    deactivate PSA
+end loop
+
+== Webhook ==
+activate Pay4Fun
+Pay4Fun -> PSA ++: <b><font color=green>status
+PSA -> PSA: update transfer
+PSA --> Kafka: transfer event
+PSA --> Pay4Fun--: <b><font color=green>HTTP 200
+deactivate Pay4Fun
+
+
+== Convertation ==
+Kafka --> PHUB ++: psa-?--all: read transfer event
+PHUB --> Kafka --: payment-hub--all: send transfer event
+
+Kafka -> FxBank ++: payment-hub--all: read transfer event
+alt : status == successful
+FxBank -> FxBank : Convert fiats -> crypto
+end
+FxBank -> FxBank: save/update deposit entity\nchange account balance
+FxBank -> Kafka --: fxbank--all: deposit event
+
+@enduml

@@ -4,11 +4,13 @@ autonumber
 actor Client
 participant PaymentPage
 participant Backend
+entity Controller
+database DB
+participant EndPoint
 participant PSA
 participant Monetix
 participant BOLETO
 participant Bank
-
 
 Client -> PaymentPage: User select Monetix method \nand press press deposit
 activate PaymentPage
@@ -22,24 +24,34 @@ activate PSA
 PSA -> Monetix: /voucher/boleto/sale
 activate Monetix
 
-Monetix --> PSA --: /voucher/boleto/sale response
+Monetix --> PSA : /voucher/boleto/sale response
 deactivate Monetix
 
 PSA --> Backend: transfer in status "inProgress"
 deactivate PSA
-deactivate Backend
 
-Monetix -> Backend ++: Get redirect REDIRECT DATA \nfrom Callback
-Backend -> Backend : Get HTML sending POST request\n using REDIRECT DATA
+note right of EndPoint: endPoint:\nnotify/<name>
+Monetix ->o Backend ++: Send Callback with redirect REDIRECT DATA 
+Backend --> Monetix --: HTTP: 200
 
+loop within timeOut = 30sec
+Backend -> DB ++: Get redirect info
+DB --> Backend --: Redirect info
+end
+
+Controller --> Backend : Redirect info
+Backend -> Backend : Update IncomeTransfer :providerDetails \nwith a redirect data
 Backend --> Client --: Get a user redirected to \nan INSTRUCTION
+deactivate Backend
 
 Client -> BOLETO ++: Complete payment in regards the instruction \nusing an appropriate bank or ATM
 BOLETO -> Bank : Initiate bank transfer
 activate Bank
 Bank -> Bank : Complete transfer
 Bank --> BOLETO --: Completed / Declined
-BOLETO --> PaymentPage --: OK
+BOLETO --> PSA --: OK
+PSA --> Backend : OK
+Backend --> PaymentPage : OK
 
 PaymentPage --> Client --: OK
 
@@ -48,7 +60,14 @@ Monetix --> PSA --: /payment/status response
 
 PSA --> Backend : /payment/status response
 
-Monetix -> Backend ++: Send callbacks with a transaction info
-Backend -> Backend --: Get status info from callbacks
+note right of EndPoint: endPoint:\nnotify/incomeTransfer
+Monetix ->o EndPoint : Send callbacks with a transaction info
+
+loop within a standard timeOut = 30sec
+Backend -> DB ++: Get transaction status
+DB --> Backend --: Transaction status
+end
+
+Controller --> Backend :transfer in :final status
 
 @enduml
