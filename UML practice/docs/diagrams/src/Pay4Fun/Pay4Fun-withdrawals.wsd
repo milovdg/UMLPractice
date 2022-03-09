@@ -3,9 +3,10 @@ autonumber
 
 actor Client
 actor Manager
-participant UPP
+participant Terminal
 participant PHUB
 participant FxBank
+participant UPP
 participant FxPay
 participant PSA
 participant dealing
@@ -16,21 +17,28 @@ participant Kafka
 
 activate Kafka
 
-Client -> UPP ++: Click Withdrawal
-UPP -> FxBank ++: getWithdrawalRequests
-FxBank --> UPP --: requests
-deactivate UPP
-
-Client -> UPP ++: Click new request
-UPP -> PHUB ++: call getWithdrawalPageLink
-deactivate UPP
-
+Client -> Terminal ++: Click withdrawal
+Terminal -> PHUB ++: getWithdrawalPageLink
 par
+
 PHUB -> FxPay ++: getPaymentMethodsConfiguration
 FxPay --> PHUB --: MethodsConfiguration
-PHUB -> PHUB : getWithdrawalMethodsDetails
-PHUB --> Client --: link to withdrawal page
+PHUB -> FxBank ++: getWithdrawalRequisites
+FxBank --> PHUB --: WD requesites
+PHUB -> PHUB : build getWithdrawalMethodsDetails
 end
+
+PHUB -> UPP ++: authorizeWithdrawal
+UPP -> FxBank ++: getWithdrawalRequests
+FxBank --> UPP --: requests
+UPP -> PHUB --: link
+PHUB --> Client --: link to withdrawal page
+
+Client -> UPP: load link in iframe
+UPP --> Client: WD requests page
+
+Client -> UPP ++: Click new request
+UPP --> Client --: WD page
 
 deactivate Client
 
@@ -45,20 +53,14 @@ UPP --> Client --: In processing withdrawal page
 
 == Process withdrawal request ==
 
-opt
-    Manager -> FxBank ++: click accept
-    FxBank --> Kafka : psa-?--all: send :accepted
-    FxBank --> Manager : ok
-end
-
-
 FxBank -> dealing ++: changeBalance with operation PAYMENT_OPERATION
+activate FxBank
 dealing --> FxBank --:  operationId and operationDate
 FxBank -> FxBank : Set balance according to dealing response 
-FxBank -> Kafka --: psa-?--all: send :sent
+FxBank -> Kafka --: fxbank--all: withdrawal :sent
 
 Kafka -> PHUB ++: withdrawal: sent
-PHUB -> Kafka --: makeTransfer
+PHUB -> Kafka --: payment-hub--all: makeTransfer
 Kafka --> PSA ++: makeTransfer
 PSA -> Pay4Fun ++: <b><font color=green>POST: /payout/payout/
 Pay4Fun --> PSA --: <b><font color=green>/payout/payout/ response \n
@@ -66,18 +68,19 @@ PSA --> Kafka --: psa-?--all: send transfer type = outcomeTransfer, \nstatus=suc
 
 deactivate PSA
 
-
+...
 == Statements ==
     loop loop by async operation configuration
     PSA -> Pay4Fun ++: <b><font color=green>GET: Get payment status /payout/transaction/
     activate PSA
     Pay4Fun --> PSA --: <b><font color=green>status
     PSA -> PSA: update transfer
-    PSA --> Kafka --: transfer event
-    Kafka --> FxBank : psa-?--all: send transfer type = outcomeTransfer, \nstatus=succeeded/failed
+    PSA --> Kafka --:  psa-?--all: transfer event
+    Kafka --> PHUB : psa-?--all: send transfer type = outcomeTransfer, \nstatus=succeeded/failed
     deactivate PSA
 end loop
 
+...
 == Convertation ==
 Kafka -> PHUB ++: psa-?--all: read transfer event
 PHUB --> Kafka --: payment-hub--all: send transfer event
