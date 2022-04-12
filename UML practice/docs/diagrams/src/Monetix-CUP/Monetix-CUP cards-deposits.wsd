@@ -1,0 +1,60 @@
+@startuml
+autonumber
+
+actor Client
+
+== CLient flow ==
+activate Client
+Client -> UPP ++: Select Debet or credit card method\nfill amount \npress press deposit
+UPP -> PHUB ++: requestDeposit\nmethod = pay_monetix_cup_cc_in
+PHUB -> PSA ++: /createIncomeTransfer\npaymentIntegrationCode = pay_monetix_cup_cc_in
+PSA -> PSA: save transfer
+PSA --> Kafka: psa-?--all: send transfer event
+PSA -> Monetix ++: <b><font color=green>POST: /v2/payment/cup/bank/sale
+Monetix --> PSA --: <b><font color=green>/v2/payment/cup/bank/sale response \n(redirect URL)
+
+Monetix -> PSA ++: <b><font color=green>redirect info
+PSA -> PSA: update transfer
+PSA --> Kafka: transfer event
+PSA --> Monetix --: <b><font color=green>HTTP 200
+
+loop cheking every 500 msec while 30 sec
+PSA -> PSA : waiting of a redirection URL in transfer
+end 
+
+PSA --> PHUB --: redirect info, transferId
+PHUB --> UPP --: redirect info, transferId
+UPP -> Client --: redirect url (CUP)
+
+Client -> Monetix ++: load deposit page
+Monetix --> Client --: deposit page
+
+Client -> Monetix ++: complete payment
+Monetix --> Client --: redirect url (result page)
+
+Client -> UPP ++: load result page
+UPP -> PHUB ++: updateIncomeTransfer\nwith transferId
+PHUB -> PSA ++: updateIncomeTransfer\nwith transferId
+PSA -> PSA: get transfer from DB
+opt status not final
+    PSA -> Monetix ++: <b><font color=green>GET: Get payment status /v2/payment/status
+    Monetix --> PSA --: <b><font color=green>status
+    PSA -> PSA: update transfer
+    PSA --> Kafka: psa-?--all: send transfer event
+end opt
+PSA -> PHUB --: Ok, transfer status
+PHUB -> UPP --: Ok, transfer status
+UPP -> Client --: result page
+deactivate Client
+
+== Statements ==
+    activate PSA
+    loop loop by async operation configuration
+    PSA -> Monetix ++: <b><font color=green>GET: Get payment status /v2/payment/status
+    Monetix --> PSA --: <b><font color=green>status
+    PSA -> PSA: update transfer
+    PSA --> Kafka: transfer event
+    deactivate PSA
+end loop
+
+@enduml

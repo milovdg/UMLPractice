@@ -5,7 +5,7 @@ actor Client
 
 == CLient flow ==
 activate Client
-Client -> UPP ++: Select Pay4Fun method\nfill amount \npress press deposit
+Client -> UPP ++: Select Pay4Fun GO method\nfill amount \npress press deposit
 
 alt payment_method = pay_pay4fun_pix_online_in \nOR payment_method = pay_pay4fun_boleto_online_in \nOR payment_method = pay_pay4fun_online_in
 UPP -> PHUB ++: requestDeposit\nmethod = <payment_method>

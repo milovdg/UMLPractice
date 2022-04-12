@@ -1,0 +1,58 @@
+@startuml
+autonumber
+
+actor Client
+
+== CLient flow ==
+activate Client
+Client -> UPP ++: Select ZotaPay method\nfill amount \npress press deposit
+UPP -> PHUB ++: requestDeposit\nmethod = pay_zotapay_unionpay_in
+PHUB -> PSA ++: /createIncomeTransfer\npaymentIntegrationCode = pay_zotapay_unionpay_in
+PSA -> PSA: save transfer
+PSA --> Kafka: psa-?--all: send transfer event
+PSA -> ZotaPay ++: <b><font color=green>POST: /api/v1/deposit/request/EndpointID/
+ZotaPay --> PSA --: <b><font color=green> /api/v1/deposit/request/EndpointID/ response \n(redirect URL)
+PSA --> PHUB --: RedirectInfo, redirect url, transferId
+PHUB --> UPP --: RedirectInfo, redirect url, transferId
+UPP -> Client --: redirect url (zotapay)
+
+Client -> ZotaPay ++: load deposit page
+ZotaPay --> Client --: deposit page
+
+Client -> ZotaPay ++: complete payment
+ZotaPay --> Client --: redirect url (result page)
+
+Client -> UPP ++: load result page
+UPP -> PHUB ++: updateIncomeTransfer\nwith transferId
+PHUB -> PSA ++: updateIncomeTransfer\nwith transferId
+PSA -> PSA: get transfer from DB
+opt status not final
+    PSA -> ZotaPay ++: <b><font color=green>GET: Get payment status /api/v1/query/order-status/
+    ZotaPay --> PSA --: <b><font color=green>status
+    PSA -> PSA: update transfer
+    PSA --> Kafka: psa-?--all: send transfer event
+end opt
+PSA -> PHUB --: Ok, transfer status
+PHUB -> UPP --: Ok, transfer status
+UPP -> Client --: result page
+deactivate Client
+
+== Statements ==
+    activate PSA
+    loop loop by async operation configuration
+    PSA -> ZotaPay ++: <b><font color=green>GET: Get payment status /api/v1/query/order-status/
+    ZotaPay --> PSA --: <b><font color=green>status
+    PSA -> PSA: update transfer
+    PSA --> Kafka: transfer event
+    deactivate PSA
+end loop
+
+== Webhook ==
+activate ZotaPay
+ZotaPay -> PSA ++: <b><font color=green>status
+PSA -> PSA: update transfer
+PSA --> Kafka: transfer event
+PSA --> ZotaPay--: <b><font color=green>HTTP 200
+deactivate ZotaPay
+
+@enduml
