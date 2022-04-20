@@ -43,20 +43,7 @@ UPP --> Client --: WD page
 deactivate Client
 
 Client -> UPP ++: Choose Pay4Fun method\nfill amount, chose requisites, presses press withdraw
-
-UPP -> PHUB ++: Request for a user screening
-PHUB -> PSA ++: Request for a user screening
-PSA -> Pay4Fun ++: <b><font color=green>POST: /1.0/goout/screening/
-Pay4Fun --> PSA --: <b><font color=green>/1.0/goout/process/ response \n(redirect URL)
-PSA --> PHUB --: Redirect info
-PHUB --> UPP --: Redirect info
-UPP --> Client --: redirect to screening URL (pay4fun)
-Client -> Pay4Fun ++: load screening page
-Pay4Fun --> Client --: screening page
-Client -> Pay4Fun ++: complete screening
-Pay4Fun --> Client --: result page
-
-UPP -> PHUB ++: requestWithdrawal, method = pay_pay4fun_out,\naccountCode, accountCurrency, amount, requesiteId
+UPP -> PHUB ++: requestWithdrawal, method = pay_pay4fungo_out,\naccountCode, accountCurrency, amount, requesiteId
 PHUB -> FxBank ++: createWithdrawal
 FxBank -> FxBank : create withdrawal
 FxBank --> Kafka : psa-?--all: send withdrawal event :created
@@ -75,11 +62,40 @@ FxBank -> Kafka --: fxbank--all: withdrawal :sent
 Kafka -> PHUB ++: withdrawal: sent
 PHUB -> Kafka --: payment-hub--all: makeTransfer
 Kafka --> PSA ++: makeTransfer
-PSA -> Pay4Fun ++: <b><font color=green>POST: /1.0/goout/process/
-Pay4Fun --> PSA --: <b><font color=green>/1.0/goout/process/ response \n
-PSA --> Kafka --: psa-?--all: send transfer type = outcomeTransfer, \nstatus=succeeded/failed
+PSA -> Pay4Fun ++: <b><font color=green>POST: /1.0/goout/screening/
+Pay4Fun --> PSA --: <b><font color=green>/1.0/goout/screening/ response \n(redirect URL)
+PSA -> PSA : update transfer with redirect URL
+PSA --> Kafka --: psa-?--all: send comand to send email
 
-deactivate PSA
+...
+== Process email ==
+Kafka -> NotificationService ++: get event
+NotificationService -> Client --: send email
+Client -> Pay4Fun ++: Complete screening
+Pay4Fun --> Client --: Result page
+
+== Screening webhook ==
+
+Pay4Fun -> PSA ++: <b><font color=green>status
+PSA -> PSA : update transfer
+PSA --> Kafka :  psa-?--all: transfer event
+PSA --> Pay4Fun : <b><font color=green>HTTP 200
+alt invoice.status = 201 (screening is succeeded)
+PSA -> Pay4Fun ++: <b><font color=green>POST: /1.0/goout/process/
+Pay4Fun --> PSA --: <b><font color=green>/1.0/goout/process/ response \n(redirect URL)
+PSA -> PSA : update transfer with redirect URL
+PSA --> Kafka --: psa-?--all: send transfer type = outcomeTransfer, \nstatus=inProgress
+else
+PSA --> Kafka --: psa-?--all: send transfer type = outcomeTransfer, \nstatus=failed
+end
+Kafka --> PHUB :  psa-?--all: send transfer type = outcomeTransfer, \nstatus=succeded/failed
+
+...
+== Payouts webhook ==
+Pay4Fun -> PSA ++: <b><font color=green>status
+PSA -> PSA : update transfer
+PSA --> Kafka :  psa-?--all: transfer event
+PSA --> Pay4Fun : <b><font color=green>HTTP 200
 
 ...
 == Statements ==
