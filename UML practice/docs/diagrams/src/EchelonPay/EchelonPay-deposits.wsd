@@ -1,0 +1,80 @@
+@startuml
+autonumber
+
+actor Client
+
+== Client flow ==
+activate Client
+Client -> UPP ++: Select EchelonPay method\nfill amount
+
+opt get banks list
+UPP -> PHUB ++: get banks list
+PHUB -> PSA ++: get banks list
+PSA -> EchelonPay ++: <b><font color=green>POST: /payins/!availablePaymentOptions
+EchelonPay --> PSA --: <font color=green> banks list
+PSA --> PHUB --: banks list
+PHUB --> UPP --:  banks list
+UPP -> Client --: select bank
+end
+
+Client -> UPP : press press deposit
+UPP -> PHUB ++: requestDeposit\nmethod = pay_echelonpay*_in
+PHUB -> PSA ++: /createIncomeTransfer\npaymentIntegrationCode = pay_echelonpay*_in
+PSA -> PSA: save transfer
+PSA --> Kafka: psa-?--all: send transfer event
+PSA -> EchelonPay ++: <b><font color=green>POST: /auth-tokens
+EchelonPay --> PSA --: <b><font color=green>/auth-tokens response \n(TOKEN)
+
+PSA -> PSA : <b><font color=green>Compile the redirect link (redirect URL)
+
+opt
+PSA -> EchelonPay ++: <b><font color=green>POST: //payins/{idPayin}/!setExternalReference
+EchelonPay --> PSA --: <b><font color=green>/!setExternalReference response
+end
+
+PSA --> PHUB --: RedirectInfo, redirect url, transferId
+PHUB --> UPP --: RedirectInfo, redirect url, transferId
+UPP -> Client --: redirect url (EchelonPay)
+
+Client -> EchelonPay ++: load deposit page
+EchelonPay --> Client --: deposit page
+
+Client -> EchelonPay ++: complete payment
+EchelonPay --> Client --: get back
+
+Client -> UPP ++: load result page
+UPP -> PHUB ++: updateIncomeTransfer\nwith transferId
+PHUB -> PSA ++: updateIncomeTransfer\nwith transferId
+PSA -> PSA: get transfer from DB
+opt status not final
+    PSA -> EchelonPay ++: <b><font color=green>GET: Get payment status /getPayIn
+    EchelonPay --> PSA --: <b><font color=green>status
+    PSA -> PSA: update transfer
+    PSA --> Kafka: psa-?--all: send transfer event
+end opt
+PSA -> PHUB --: Ok, transfer status
+PHUB -> UPP --: Ok, transfer status
+UPP -> Client --: result page
+deactivate Client
+
+== Statements ==
+    activate PSA
+    loop loop by async operation configuration
+    PSA -> EchelonPay ++: <b><font color=green>GET: Get payment status /getPayIn
+    EchelonPay --> PSA --: <b><font color=green>status
+    PSA -> PSA: update transfer
+    PSA --> Kafka: transfer event
+    deactivate PSA
+end loop
+
+== Webhook ==
+activate EchelonPay
+EchelonPay -> PSA ++: <b><font color=green>transaction ID
+PSA -> EchelonPay ++: <b><font color=green>GET: Get payment status /getPayIn
+EchelonPay --> PSA --: <b><font color=green>status
+PSA -> PSA: update transfer
+PSA --> Kafka: transfer event
+PSA --> EchelonPay--: <b><font color=green>HTTP 200
+deactivate EchelonPay
+
+@enduml
