@@ -1,0 +1,125 @@
+@startuml
+autonumber
+
+actor Client
+participant UPP
+participant PHUB
+participant FxBank
+participant PSA
+participant SettlePay
+participant Kafka
+participant Tokenex
+participant secretsVault
+
+== CLient flow ==
+activate Client
+
+Client -> UPP : Press deposit
+
+UPP -> UPP : take parameters from config \nfor front-end integration
+UPP -> secretsVault : get secret for tokenex.com
+activate secretsVault
+secretsVault --> UPP : secret to validate token HMAC \nand to generate authenticationKey
+deactivate secretsVault
+UPP -> UPP : prepare config for Tokenex iframe
+
+UPP -> Tokenex : tokenex js
+activate Tokenex
+Tokenex --> UPP
+deactivate Tokenex
+UPP -> UPP : build page attributes
+UPP ---> Client
+
+Client -> Tokenex : iframe.validate() card number, cvv
+activate Tokenex
+Tokenex ->> Client: token, card mask, card type
+deactivate Tokenex
+
+Client -> Tokenex : <b><font color=green>iframe.tokenize() card number, cvv
+activate Tokenex
+Tokenex ->> Client: token, card mask, card type
+deactivate Tokenex
+
+Client -> UPP ++: Select SettlePay method\nfill amount and card data\nsubmit deposit
+
+UPP -> PHUB --: requestDeposit
+
+alt Has restrictions
+PHUB --> UPP : DepositNotAllowed
+UPP --> Client : KYC forms
+Client --> Client : KYC forms
+
+else No restrictions
+PHUB -> UPP : authorizeDeposit
+UPP -> UPP: generate link
+UPP --> PHUB : link to UPP page
+UPP -> UPP: start preload
+PHUB --> UPP : RedirectToLink
+UPP --> Client : link to deposit page
+end
+
+UPP -> PHUB ++: requestDeposit\nmethod = pay_settlepay_cc_in
+PHUB -> PSA ++: /createIncomeTransfer\npaymentIntegrationCode = pay_settlepay_unionpay_in
+PSA -> PSA: save transfer
+PSA --> Kafka: psa-?--all: send transfer event
+PSA -> Tokenex ++: <b><font color=green>detokenization()
+Tokenex -> SettlePay ++: put card data \n<b><font color=green>POST: /transaction/pay
+SettlePay --> Tokenex --: <b><font color=green> /transaction/pay response \n(status/redurect URL)
+
+Tokenex --> PSA --: <b><font color=green> /transaction/pay response \n(status/redurect URL)
+deactivate Tokenex
+
+alt 3DS
+    PSA --> PHUB --: Redirect URL
+    PHUB --> UPP --: Redirect URL
+    UPP -> Client --: Redirect URL
+    Client -> SettlePay ++: Get user redirected
+    SettlePay -> SettlePay : Complete 3DS
+    SettlePay --> PSA --: 3DS result (status)
+    PSA --> PHUB --: Status, transferId
+    PHUB --> UPP --: Status, transferId
+    UPP -> Client --: Status (SettlePay)
+
+else non 3DS
+    PSA --> PHUB --: Status, transferId
+    PHUB --> UPP --: Status, transferId
+    UPP -> Client --: Status (SettlePay)
+end
+
+Client -> UPP ++: load result page
+UPP -> PHUB ++: updateIncomeTransfer\nwith transferId
+PHUB -> PSA ++: updateIncomeTransfer\nwith transferId
+PSA -> PSA: get transfer from DB
+opt status not final
+    PSA -> SettlePay ++: <b><font color=green>GET: Get payment status /transaction/find
+    SettlePay --> PSA --: <b><font color=green>status
+    PSA -> PSA: update transfer
+    PSA --> Kafka: psa-?--all: send transfer event
+end opt
+PSA -> PHUB --: Ok, transfer status
+PHUB -> UPP --: Ok, transfer status
+UPP -> Client --: result page
+deactivate Client
+
+== Statements ==
+    activate PSA
+    loop loop by async operation configuration
+    PSA -> SettlePay ++: <b><font color=green>GET: Get payment status /transaction/find
+    SettlePay --> PSA --: <b><font color=green>status
+    PSA -> PSA: update transfer
+    PSA --> Kafka: transfer event
+    deactivate PSA
+end loop
+
+== Webhook ==
+activate EchelonPay
+SettlePay -> PSA ++: <b><font color=green>transaction ID
+PSA -> SettlePay ++: <b><font color=green>GET: Get payment status /transaction/find
+SettlePay --> PSA --: <b><font color=green>status
+PSA -> PSA: update transfer
+PSA --> Kafka: transfer event
+PSA --> SettlePay--: <b><font color=green>HTTP 200
+deactivate SettlePay
+
+
+@enduml
