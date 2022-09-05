@@ -10,6 +10,7 @@ participant PSA
 participant FxBank
 participant FxPay
 participant dealing
+participant Tokenex
 participant SettlePay
 participant Kafka
 
@@ -19,16 +20,17 @@ activate Kafka
 
 Client -> Terminal ++: Click withdrawal
 Terminal -> PHUB ++: getWithdrawalPageLink
-par
+deactivate Terminal
 
+par
 PHUB -> FxPay ++: getPaymentMethodsConfiguration
 FxPay --> PHUB --: MethodsConfiguration
 PHUB -> FxBank ++: getWithdrawalRequisites
 FxBank --> PHUB --: WD requesites
-PHUB -> PHUB : build getWithdrawalMethodsDetails
+PHUB -> PHUB : build getWithdrawalMethodsDetails <b><font color=green> requisites including tokenizerDetails
 end
 
-PHUB -> UPP ++: authorizeWithdrawal
+PHUB -> UPP ++: authorizeWithdrawal \nsave requisites in the internal client's session
 UPP -> FxBank ++: getWithdrawalRequests
 FxBank --> UPP --: requests
 UPP -> PHUB --: link
@@ -42,14 +44,42 @@ UPP --> Client --: WD page
 
 deactivate Client
 
-Client -> UPP ++: Choose SettlePay method\nfill amount, chose requisites, presses press withdraw
-UPP -> PHUB ++: requestWithdrawal, method = pay_SettlePay_out,\naccountCode, accountCurrency, amount, requesiteId
+Client -> UPP ++: Choose SettlePay method\nfill amount, chose the requisite
+note right: FE
+
+activate UPP
+
+alt is tokenizerDetails empty?
+    
+    UPP -> Tokenex ++:  <b><font color=green> tokenex.js
+    note right of UPP: BE
+    Tokenex --> UPP --:    
+    UPP -> UPP : Authrization in iFrame with Tokenex context
+    note right of UPP: BE
+    UPP --> Client ++: card number
+    Client -> UPP --: <b><font color=green> input card number
+    note right: FE
+    UPP -> UPP : transfer requisite token from FE to BE
+    note right of UPP: FE
+end
+
+UPP -> PHUB --: requestWithdrawal, method = pay_SettlePay_out,\naccountCode, accountCurrency, amount, requesiteId, <b><font color=green> token
+deactivate UPP
+activate PHUB
+
+opt A card was not tokenized
+    PHUB -> FxBank ++: setCustomerWithdrawalRequisite \n<b><font color=green>  token: update(attach) tokenizerDetails to requisite
+    FxBank --> PHUB --: updated
+end
+
 PHUB -> FxBank ++: createWithdrawal
+deactivate PHUB
 FxBank -> FxBank : create withdrawal
 FxBank --> Kafka : psa-?--all: send withdrawal event :created
 FxBank --> PHUB --: inProcessing | Incomplete
 PHUB --> UPP --: inProcessing | Incomplete
 UPP --> Client --: In processing withdrawal page
+
 
 == Process withdrawal request ==
 
@@ -62,8 +92,11 @@ FxBank -> Kafka --: fxbank--all: withdrawal :sent
 Kafka -> PHUB ++: withdrawal: sent
 PHUB -> Kafka --: payment-hub--all: makeTransfer
 Kafka --> PSA ++: makeTransfer
-PSA -> SettlePay ++: <b><font color=green>POST: /transaction/pay
-SettlePay --> PSA --: <b><font color=green>/transaction/pay response \n
+PSA -> Tokenex ++: <b><font color=green>detokenization()
+Tokenex -> Tokenex : Card number
+Tokenex -> SettlePay ++: <b><font color=green>POST: /transaction/pay
+SettlePay --> Tokenex : <b><font color=green>/transaction/pay response
+Tokenex --> PSA --: <b><font color=green>/transaction/pay response
 PSA -> PSA : update transfer with status
 PSA --> Kafka --: psa-?--all: status
 SettlePay --> Client --: Result page
