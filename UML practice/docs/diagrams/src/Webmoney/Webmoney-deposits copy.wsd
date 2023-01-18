@@ -1,0 +1,60 @@
+@startuml
+autonumber
+
+actor Client
+
+== Client flow ==
+activate Client
+Client -> UPP ++: Select WebMoney method\nfill amount
+
+Client -> UPP : press press deposit
+UPP -> PHUB ++: requestDeposit\nmethod = pay_webmoney
+PHUB -> FXPAY ++: /createIncomeTransfer\npaymentIntegrationCode = pay_webmoney
+FXPAY -> FXPAY: save transfer
+
+FXPAY -> FXPAY : <b><font color=green>Compile the redirect link (redirect URL)
+
+FXPAY --> PHUB --: RedirectInfo, redirect url, transferId
+PHUB --> UPP --: RedirectInfo, redirect url, transferId
+UPP -> Client --: redirect url (WebMoney)
+
+Client -> WebMoney ++: load deposit page
+WebMoney --> Client --: deposit page
+
+Client -> WebMoney ++: complete payment
+WebMoney --> Client --: get back
+
+Client -> UPP ++: load result page
+UPP -> PHUB ++: updateIncomeTransfer\nwith transferId
+PHUB -> FXPAY ++: updateIncomeTransfer\nwith transferId
+FXPAY -> FXPAY: get transfer from DB
+opt status not final
+    FXPAY -> WebMoney ++: <b><font color=green>POST: Get payment status /X3
+    WebMoney --> FXPAY --: <b><font color=green>status
+    FXPAY -> FXPAY: update transfer
+    FXPAY --> Kafka: fxpay-?--all: send transfer event
+end opt
+FXPAY -> PHUB --: Ok, transfer status
+PHUB -> UPP --: Ok, transfer status
+UPP -> Client --: result page
+deactivate Client
+
+== Statements ==
+    activate FXPAY
+    loop loop by async operation configuration
+    FXPAY -> WebMoney ++: <b><font color=green>POST: Get payment status /X3
+    WebMoney --> FXPAY --: <b><font color=green>status
+    FXPAY -> FXPAY: update transfer
+    FXPAY --> Kafka: transfer event
+    deactivate FXPAY
+end loop
+
+== Webhook ==
+activate WebMoney
+WebMoney --> FXPAY --: <b><font color=green>status
+FXPAY -> FXPAY: update transfer
+FXPAY --> Kafka: transfer event
+FXPAY --> WebMoney--: <b><font color=green>HTTP 200
+deactivate WebMoney
+
+@enduml
