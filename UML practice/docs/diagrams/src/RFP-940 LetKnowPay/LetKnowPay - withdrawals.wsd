@@ -1,0 +1,88 @@
+@startuml
+autonumber
+
+actor Client
+actor Manager
+participant Terminal
+participant UPP
+participant PHUB
+participant PSA
+participant FxBank
+participant FxPay
+participant dealing
+participant LETKNOWPAY
+participant Kafka
+
+== Client flow ==
+
+activate Kafka
+
+Client -> Terminal ++: Click withdrawal
+Terminal -> PHUB ++: getWithdrawalPageLink
+deactivate Terminal
+
+par
+PHUB -> FxPay ++: getPaymentMethodsConfiguration
+FxPay --> PHUB --: MethodsConfiguration
+PHUB -> FxBank ++: getWithdrawalRequisites
+FxBank --> PHUB --: WD requesites
+PHUB -> PHUB : build getWithdrawalMethodsDetails
+end
+
+PHUB -> UPP ++: authorizeWithdrawal \nsave requisites in the internal client's session
+UPP -> FxBank ++: getWithdrawalRequests
+FxBank --> UPP --: requests
+UPP -> PHUB --: link
+PHUB --> Client --: link to withdrawal page
+
+Client -> UPP: load link in iframe
+UPP --> Client: WD requests page
+
+Client -> UPP ++: Click new request
+UPP --> Client --: WD page
+
+deactivate Client
+
+Client -> UPP ++: Choose LETKNOWPAY method\nfill amount, chose the requisite
+
+activate UPP
+
+UPP -> PHUB --: requestWithdrawal, method = pay_LETKNOWPAY_out,\naccountCode (curdNumber), accountCurrency, amount, requesiteId
+deactivate UPP
+activate PHUB
+
+PHUB -> FxBank ++: createWithdrawal
+deactivate PHUB
+FxBank -> FxBank : create withdrawal
+FxBank --> Kafka : psa-?--all: send withdrawal event :created
+FxBank --> PHUB --: inProcessing | Incomplete
+PHUB --> UPP --: inProcessing | Incomplete
+UPP --> Client --: In processing withdrawal page
+
+
+== Process withdrawal request ==
+
+FxBank -> dealing ++: changeBalance with operation PAYMENT_OPERATION
+activate FxBank
+dealing --> FxBank --:  operationId and operationDate
+FxBank -> FxBank : Set balance according to dealing response 
+FxBank -> Kafka --: fxbank--all: withdrawal :sent
+
+Kafka -> PHUB ++: withdrawal: sent
+PHUB -> Kafka --: payment-hub--all: makeTransfer
+Kafka --> PSA ++: makeTransfer
+PSA -> LETKNOWPAY ++: <b><font color=green>POST: /withdraw
+LETKNOWPAY --> PSA --: <b><font color=green>/withdraw response
+PSA -> PSA : update transfer with status
+PSA --> Kafka : psa-?--all: status
+PSA --> Client --: Result page
+
+...
+== Payouts webhook ==
+LETKNOWPAY --> PSA ++: <b><font color=green>status
+PSA -> PSA : update transfer
+PSA --> Kafka :  psa-?--all: transfer event
+PSA --> LETKNOWPAY : <b><font color=green>HTTP 200
+deactivate PSA
+
+@enduml

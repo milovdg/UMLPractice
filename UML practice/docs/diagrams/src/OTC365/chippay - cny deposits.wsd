@@ -1,0 +1,72 @@
+@startuml
+autonumber
+
+actor Client
+
+== Client flow ==
+activate Client
+Client -> UPP ++: Select ChipPay method\nfill amount
+
+Client -> UPP : press press deposit
+UPP -> PHUB ++: requestDeposit\nmethod = pay_chippay_cny_oth_in
+PHUB -> PSA ++: /createIncomeTransfer\npaymentIntegrationCode = pay_chippay_cny_oth_in
+PSA -> PSA: save transfer
+
+PSA -> ChipPay ++: Request the order <b><font color=green>POST: /addIntentOrder 
+
+ChipPay --> PSA --: Redirect link
+
+PSA -> PSA : update \ntransfer status: in progress
+PSA --> Kafka : event.transfer
+
+PSA --> PHUB --: RedirectInfo, redirect url, transferId
+PHUB --> UPP --: RedirectInfo, redirect url, transferId
+UPP -> Client --: redirect url (ChipPay)
+
+Client -> ChipPay ++: load deposit page
+ChipPay --> Client --: deposit page
+
+Client -> ChipPay ++: complete payment
+
+ChipPay -> ChipPay : Verify client by phone
+
+alt Once per 120 hour
+ChipPay -> ChipPay : Facial scanning
+end
+
+ChipPay --> Client --: get back
+
+Client -> UPP ++: load result page
+UPP -> PHUB ++: updateStatement\nwith transferId
+PHUB -> PSA ++: updateStatement\nwith transferId
+PSA -> PSA: get transfer from DB
+opt status not final
+    PSA -> ChipPay ++: Get payment status <b><font color=green>POST: /queryIntentOrder
+    ChipPay --> PSA --: <b><font color=green>status
+    PSA -> PSA: update transfer
+    PSA --> Kafka: psa-?--all: send transfer event
+end opt
+PSA -> PHUB --: Ok, transfer status
+PHUB -> UPP --: Ok, transfer status
+UPP -> Client --: result page
+deactivate Client
+
+== Statements ==
+    activate PSA
+    loop loop by async operation configuration
+    PSA -> ChipPay ++: Get payment status <b><font color=green>POST: /queryIntentOrder
+    ChipPay --> PSA --: <b><font color=green>status
+    PSA -> PSA: update transfer
+    PSA --> Kafka: transfer event
+    deactivate PSA
+end loop
+
+== Webhook ==
+activate ChipPay
+ChipPay --> PSA --: <b><font color=green>status
+PSA -> PSA: update transfer
+PSA --> Kafka: transfer event
+PSA --> ChipPay--: <b><font color=green>HTTP 200
+deactivate ChipPay
+
+@enduml 
