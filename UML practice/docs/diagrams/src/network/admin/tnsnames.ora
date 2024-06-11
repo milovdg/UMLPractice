@@ -1,9 +1,0 @@
-FxBank2_BVI =
-(DESCRIPTION =
-(ADDRESS_LIST =
-(ADDRESS = (PROTOCOL = TCP)(HOST = terraform-20201102125721100600000003.cgonidmbev5l.us-east-1.rds.amazonaws.com) (PORT = 1521))
-)
-(CONNECT_DATA =
-(SID = ORCL )
-)
-)
